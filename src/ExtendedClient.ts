@@ -6,6 +6,7 @@ import Config from './Config';
 import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
 import Logger from './services/Logger';
+import Database from './storage/Database';
 
 export default class ExtendedClient extends Client {
   private readonly events: BotEventHandler[];
@@ -45,8 +46,9 @@ export default class ExtendedClient extends Client {
     await this.loadEvents();
 
     await this.commands.load();
-    await this.commands.update();
+    // await this.commands.update();
 
+    Database.initialize();
     await this.login(Config.DISCORD_TOKEN);
   }
 }
