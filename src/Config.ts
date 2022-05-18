@@ -6,7 +6,9 @@ const GatewayIntents = require('../config/GatewayIntents.json');
 export default class Config {
   private static populateConfig() {
     if (!process.env['DISCORD_TOKEN']) throw new Error('No bot token was provided!');
-    const { DISCORD_TOKEN, DEV_GUILD_ID } = process.env;
+    const {
+      DISCORD_TOKEN, DEV_GUILD_ID, CURRENCY_NAME, CURRENCY_NAME_PLURAL,
+    } = process.env;
 
     const encryptedClientId = DISCORD_TOKEN.split('.')[0];
     if (!encryptedClientId) throw new Error('Invalid bot token!');
@@ -14,7 +16,12 @@ export default class Config {
 
     const DEVELOPMENT_MODE = process.env['DEVELOPMENT_MODE'] !== 'FALSE';
     return {
-      DISCORD_TOKEN, DEV_GUILD_ID, BOT_CLIENT_ID, DEVELOPMENT_MODE,
+      DISCORD_TOKEN,
+      DEV_GUILD_ID,
+      BOT_CLIENT_ID,
+      DEVELOPMENT_MODE,
+      CURRENCY_NAME,
+      CURRENCY_NAME_PLURAL,
     };
   }
 
@@ -27,4 +34,8 @@ export default class Config {
   static DEVELOPMENT_MODE: boolean = Config.populateConfig().DEVELOPMENT_MODE;
 
   static GATEWAY_INTENTS: GatewayIntentsString[] = GatewayIntents.intents;
+
+  static CURRENCY_NAME: string | undefined = Config.populateConfig().CURRENCY_NAME;
+
+  static CURRENCY_NAME_PLURAL: string | undefined = Config.populateConfig().CURRENCY_NAME_PLURAL;
 }

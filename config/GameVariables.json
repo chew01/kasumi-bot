@@ -1,0 +1,50 @@
+{
+"gambling": {
+  "blackjack": {
+    "minimumBet": 1,
+    "maximumBet": 50,
+    "multiplier": 2
+  },
+  "coinflip": {
+    "minimumBet": 1,
+    "maximumBet": 50,
+    "multiplier": 2
+  },
+  "roulette": {
+    "minimumBet": 1,
+    "maximumBet": 50,
+    "multiplier": 2,
+    "jackpotMultiplier": 35
+  },
+  "slots": {
+    "minimumBet": 1,
+    "maximumBet": 50,
+    "icons": [
+      "<:luckyseven:976209029003083796>",
+      "🍋",
+      "🍇",
+      "🍒",
+      "🫐"
+    ],
+    "weightage": [
+      0.05,
+      0.15,
+      0.2,
+      0.2,
+      0.4
+    ],
+    "multiplier": [
+      20,
+      12,
+      8,
+      4,
+      2
+    ]
+  }
+},
+  "income": {
+    "daily": {},
+    "fish": {},
+    "mine": {}
+  }
+}
