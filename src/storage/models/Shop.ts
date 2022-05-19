@@ -1,9 +1,14 @@
 import Database from '../Database';
 import Member from './Member';
-import type { InventoryType } from './Inventory';
+
+type ListingType = {
+  item_name: string,
+  price: number,
+  role_id: string
+};
 
 export default class Shop {
-  public static getListings(): InventoryType[] {
+  public static getListings(): ListingType[] {
     return Database.fetchAll('SELECT it.item_name, price, role_id FROM shop_listing JOIN item_type it on shop_listing.item_name = it.item_name');
   }
 

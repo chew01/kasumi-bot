@@ -1,19 +1,63 @@
 import {
   ActionRowBuilder,
+  ApplicationCommandOptionData,
+  ApplicationCommandOptionType,
   ButtonBuilder,
   ButtonStyle,
   CommandInteraction,
   EmbedBuilder,
   Formatters,
   MessageComponentInteraction,
-  SlashCommandBuilder,
 } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
-import Inventory from '../../../storage/Inventory';
+import Inventory from '../../../storage/models/Inventory';
+import Config from '../../../Config';
+import MathUtils from '../../../utils/MathUtils';
 
 class TradeCommand extends SlashCommand {
-  async execute(interaction: CommandInteraction) {
-    if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) return interaction.reply({ content: 'Oops, we ran into an error. Try again!' });
+  public name: string = 'trade';
+
+  public description: string = 'Trade with another user';
+
+  public options: ApplicationCommandOptionData[] = [
+    {
+      name: 'your_item',
+      description: 'The item you want to offer',
+      type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+    {
+      name: 'your_quantity',
+      description: 'The quantity you want to offer',
+      type: ApplicationCommandOptionType.Integer,
+      minValue: 0,
+      required: true,
+    },
+    {
+      name: 'user',
+      description: 'The user you want to trade with',
+      type: ApplicationCommandOptionType.User,
+      required: true,
+    },
+    {
+      name: 'their_item',
+      description: 'The item you want to trade for',
+      type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+    {
+      name: 'their_quantity',
+      description: 'The quantity you want to trade for',
+      type: ApplicationCommandOptionType.Integer,
+      minValue: 0,
+      required: true,
+    },
+  ];
+
+  async run(interaction: CommandInteraction) {
+    if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) {
+      return interaction.reply({ content: Config.ERROR_MSG });
+    }
     const yourItem = interaction.options.getString('your_item');
     const yourQty = interaction.options.getInteger('your_quantity');
     const user = interaction.options.getUser('user');
@@ -21,17 +65,19 @@ class TradeCommand extends SlashCommand {
     const theirQty = interaction.options.getInteger('their_quantity');
     if (!yourItem || !yourQty || !user || !theirItem || !theirQty) return interaction.reply({ content: 'You entered an invalid parameter. Try again!' });
 
-    const yourCheck = Inventory.checkQuantityOwned(interaction.user.id, yourItem, yourQty);
-    if (yourCheck === false) return interaction.reply({ content: `You do not own ${yourQty}x ${yourItem}.` });
-    const theirCheck = Inventory.checkQuantityOwned(user.id, theirItem, theirQty);
-    if (theirCheck === false) return interaction.reply({ content: `You do not own ${yourQty}x ${yourItem}.` });
-    if (yourCheck === null || theirCheck === null) return interaction.reply({ content: 'Oops, we ran into an error. Try again!' });
+    const yourOwned = Inventory.getQuantityOwned(interaction.user.id, yourItem);
+    if (yourOwned < yourQty) return interaction.reply({ content: `You do not own **${yourQty}x ${yourItem}**.` });
+    const theirOwned = Inventory.getQuantityOwned(user.id, theirItem);
+    if (theirOwned < theirQty) return interaction.reply({ content: `Your target does not own **${theirQty}x ${theirItem}**.` });
 
     const embed = new EmbedBuilder()
       .setTitle('Trade Request!')
+      .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setDescription(`${Formatters.userMention(interaction.user.id)} wants to trade with you!`)
-      .addFields([{ name: 'Their offer:', value: `${yourQty}x ${yourItem}`, inline: true },
-        { name: 'They want:', value: `${theirQty}x ${theirItem}`, inline: true }]);
+      .setTimestamp()
+      .setFooter({ text: `This trade request will expire in ${MathUtils.msToMinutes(Config.TRADE_EXPIRY, 0)} minutes.` })
+      .addFields([{ name: 'Their offer', value: `${yourQty}x ${yourItem}`, inline: true },
+        { name: 'They want', value: `${theirQty}x ${theirItem}`, inline: true }]);
 
     const accept = new ButtonBuilder()
       .setLabel('Accept')
@@ -54,13 +100,21 @@ class TradeCommand extends SlashCommand {
       content: `${Formatters.userMention(user.id)}`, embeds: [embed], components: [row], fetchReply: true,
     });
 
-    const filter = (i: MessageComponentInteraction) => (['accept', 'reject'].includes(i.customId) && i.user.id === user.id) || (i.customId === 'cancel' && i.user.id === interaction.user.id);
-    const collector = msg.createMessageComponentCollector({ filter, time: 150000 });
+    const filter = (i: MessageComponentInteraction) => (['accept', 'reject'].includes(i.customId) && i.user.id === user.id)
+        || (i.customId === 'cancel' && i.user.id === interaction.user.id);
+    const collector = msg.createMessageComponentCollector({ filter, time: Config.TRADE_EXPIRY });
 
     collector.on('collect', async (i) => {
       if (i.customId === 'accept') {
-        const operation = Inventory.trade(interaction.user.id, yourItem, yourQty, user.id, theirItem, theirQty);
-        if (!operation) {
+        const op = Inventory.trade(
+          interaction.user.id,
+          yourItem,
+          yourQty,
+          user.id,
+          theirItem,
+          theirQty,
+        );
+        if (!op) {
           const failEmbed = new EmbedBuilder()
             .setTitle('Trade failed!')
             .setDescription('The trade process failed. Please try again later.');
@@ -96,29 +150,5 @@ class TradeCommand extends SlashCommand {
     return null;
   }
 }
-
-export const builder = new SlashCommandBuilder()
-  .setName('trade')
-  .setDescription('Trade items with another member.')
-  .addStringOption((option) => option
-    .setName('your_item')
-    .setDescription('The item you want to offer.')
-    .setRequired(true))
-  .addIntegerOption((option) => option
-    .setName('your_quantity')
-    .setDescription('The quantity you want to offer.')
-    .setRequired(true))
-  .addUserOption((option) => option
-    .setName('user')
-    .setDescription('The user you want to trade with.')
-    .setRequired(true))
-  .addStringOption((option) => option
-    .setName('their_item')
-    .setDescription('The item you want to trade for.')
-    .setRequired(true))
-  .addIntegerOption((option) => option
-    .setName('their_quantity')
-    .setDescription('The quantity you want to trade for.')
-    .setRequired(true));
 
 export default new TradeCommand();
