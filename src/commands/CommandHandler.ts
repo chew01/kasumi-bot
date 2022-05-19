@@ -8,26 +8,23 @@ import Logger from '../services/Logger';
 import SlashCommand from '../types/SlashCommand';
 
 export default class CommandHandler {
-  private readonly devCommandBuilders: SlashCommandBuilder[];
-
-  private readonly publicCommandBuilders: SlashCommandBuilder[];
+  private readonly commandBuilders: SlashCommandBuilder[];
 
   private commands: Map<string, SlashCommand>;
 
   public constructor() {
-    this.devCommandBuilders = [];
-    this.publicCommandBuilders = [];
+    this.commandBuilders = [];
     this.commands = new Map<string, SlashCommand>();
   }
 
-  private async loadCommands(type: 'dev' | 'public', builders: SlashCommandBuilder[]) {
+  private async loadCommands(dir: string, builders: SlashCommandBuilder[]) {
     let commandFiles: string[] = [];
-    fs.readdirSync(path.resolve(__dirname, type), { withFileTypes: true })
+    fs.readdirSync(path.resolve(__dirname, dir), { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
       .forEach((dirent) => {
-        const commandsInDir = fs.readdirSync(path.resolve(__dirname, `${type}/${dirent.name}`))
+        const commandsInDir = fs.readdirSync(path.resolve(__dirname, `${dir}/${dirent.name}`))
           .filter((filename) => filename.match(/\.([tj])s$/))
-          .map((filename) => `./${type}/${dirent.name}/${filename}`);
+          .map((filename) => `./${dir}/${dirent.name}/${filename}`);
         commandFiles = [...commandFiles, ...commandsInDir];
       });
 
@@ -40,28 +37,23 @@ export default class CommandHandler {
       if (command.default && command.default instanceof SlashCommand) {
         this.commands.set(command.builder.name, command.default);
       } else throw new Error(`Command file ${filepath} does not export a valid slash command as default.`);
-    })).then(() => Logger.info(`${type === 'dev' ? `${this.devCommandBuilders.length} developer` : `${this.publicCommandBuilders.length} public`} commands loaded.`));
+    })).then(() => Logger.info(`${this.commandBuilders.length} commands loaded.`));
   }
 
   public async load() {
-    if (!Config.DEVELOPMENT_MODE) await this.loadCommands('public', this.publicCommandBuilders);
-    await this.loadCommands('dev', this.devCommandBuilders);
+    await this.loadCommands('server', this.commandBuilders);
   }
 
   public async update() {
     const rest = new REST({ version: '10' }).setToken(Config.DISCORD_TOKEN);
 
     try {
-      if (this.publicCommandBuilders.length) {
-        const body = this.publicCommandBuilders.map((builder) => builder.toJSON());
-        await rest.put(Routes.applicationCommands(Config.BOT_CLIENT_ID), { body });
-      }
-      if (Config.DEV_GUILD_ID) {
-        const body = this.devCommandBuilders.map((builder) => builder.toJSON());
+      if (Config.GUILD_ID) {
+        const body = this.commandBuilders.map((builder) => builder.toJSON());
         await rest.put(
           Routes.applicationGuildCommands(
             Config.BOT_CLIENT_ID,
-            Config.DEV_GUILD_ID,
+            Config.GUILD_ID,
           ),
           { body },
         );
