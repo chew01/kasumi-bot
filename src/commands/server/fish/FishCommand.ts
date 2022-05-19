@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters } from 'discord.js';
+import { ApplicationCommandOptionData, CommandInteraction, Formatters } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import Member from '../../../storage/models/Member';
 import WorkData from '../../../storage/models/WorkData';
@@ -6,11 +6,11 @@ import CurrencyUtils from '../../../utils/CurrencyUtils';
 import Config from '../../../Config';
 
 class FishCommand extends SlashCommand {
-  public name = 'fish';
+  public name: string = 'fish';
 
-  public description = 'Fish for income (4hr cooldown)';
+  public description: string = 'Fish for income (4hr cooldown)';
 
-  public options = [];
+  public options: ApplicationCommandOptionData[] = [];
 
   async run(interaction: CommandInteraction) {
     const lastFished = WorkData.getFish(interaction.user.id);

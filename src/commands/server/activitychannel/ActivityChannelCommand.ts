@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { ApplicationCommandOptionData, CommandInteraction } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import { activityChannelList, activityCommandListSC } from './list/ActivityChannelList';
 import { activityChannelAdd, activityCommandAddSC } from './add/ActivityChannelAdd';
@@ -6,11 +6,15 @@ import { activityChannelRemove, activityCommandRemoveSC } from './remove/Activit
 import Config from '../../../Config';
 
 class ActivityChannelCommand extends SlashCommand {
-  public name = 'activity_channel';
+  public name: string = 'activity_channel';
 
-  public description = 'Manage channels to be tracked for activity';
+  public description: string = 'Manage channels to be tracked for activity';
 
-  public options = [activityCommandListSC, activityCommandAddSC, activityCommandRemoveSC];
+  public options: ApplicationCommandOptionData[] = [
+    activityCommandListSC,
+    activityCommandAddSC,
+    activityCommandRemoveSC,
+  ];
 
   async run(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return interaction.reply({ content: Config.ERROR_MSG });

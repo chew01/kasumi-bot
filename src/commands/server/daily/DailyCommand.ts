@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters } from 'discord.js';
+import { ApplicationCommandOptionData, CommandInteraction, Formatters } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import WorkData from '../../../storage/models/WorkData';
 import Member from '../../../storage/models/Member';
@@ -6,11 +6,11 @@ import Config from '../../../Config';
 import CurrencyUtils from '../../../utils/CurrencyUtils';
 
 class DailyCommand extends SlashCommand {
-  public name = 'daily';
+  public name: string = 'daily';
 
-  public description = 'Get daily login rewards (refresh at 5AM EST)';
+  public description: string = 'Get daily login rewards (refresh at 5AM EST)';
 
-  public options = [];
+  public options: ApplicationCommandOptionData[] = [];
 
   async run(interaction: CommandInteraction) {
     const resetTime = new Date();
