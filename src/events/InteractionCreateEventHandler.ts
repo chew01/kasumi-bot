@@ -2,6 +2,7 @@ import type { CommandInteraction } from 'discord.js';
 import BotEventHandler from '../types/BotEventHandler';
 import Logger from '../services/Logger';
 import type ExtendedClient from '../ExtendedClient';
+import MemberCache from '../cache/MemberCache';
 
 class InteractionCreateEventHandler extends BotEventHandler {
   name = 'interactionCreate';
@@ -10,6 +11,7 @@ class InteractionCreateEventHandler extends BotEventHandler {
 
   async execute(client: ExtendedClient, interaction: CommandInteraction) {
     if (interaction.isCommand()) {
+      MemberCache.initialiseIfNotExists(interaction.user.id);
       Logger.logCommand(interaction, 'Trigger', interaction.commandName);
       const slashCommand = await client.commands.handle(interaction.commandName);
 

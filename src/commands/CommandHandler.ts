@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { SlashCommandBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 import Config from '../Config';
@@ -8,16 +7,13 @@ import Logger from '../services/Logger';
 import SlashCommand from '../types/SlashCommand';
 
 export default class CommandHandler {
-  private readonly commandBuilders: SlashCommandBuilder[];
-
   private commands: Map<string, SlashCommand>;
 
   public constructor() {
-    this.commandBuilders = [];
     this.commands = new Map<string, SlashCommand>();
   }
 
-  private async loadCommands(dir: string, builders: SlashCommandBuilder[]) {
+  private async loadCommands(dir: string) {
     let commandFiles: string[] = [];
     fs.readdirSync(path.resolve(__dirname, dir), { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
@@ -27,21 +23,17 @@ export default class CommandHandler {
           .map((filename) => `./${dir}/${dirent.name}/${filename}`);
         commandFiles = [...commandFiles, ...commandsInDir];
       });
-
     await Promise.all(commandFiles.map(async (filepath) => {
       const command = await import(filepath);
-      if (command.builder && command.builder instanceof SlashCommandBuilder) {
-        builders.push(command.builder);
-      } else throw new Error(`Command file ${filepath} does not contain valid builder.`);
 
       if (command.default && command.default instanceof SlashCommand) {
-        this.commands.set(command.builder.name, command.default);
+        this.commands.set(command.default.name, command.default);
       } else throw new Error(`Command file ${filepath} does not export a valid slash command as default.`);
-    })).then(() => Logger.info(`${this.commandBuilders.length} commands loaded.`));
+    })).then(() => Logger.info(`${this.commands.size} commands loaded.`));
   }
 
   public async load() {
-    await this.loadCommands('server', this.commandBuilders);
+    await this.loadCommands('server');
   }
 
   public async update() {
@@ -49,7 +41,8 @@ export default class CommandHandler {
 
     try {
       if (Config.GUILD_ID) {
-        const body = this.commandBuilders.map((builder) => builder.toJSON());
+        const body = Array.from(this.commands.values())
+          .map((cmd) => ({ name: cmd.name, description: cmd.description, options: cmd.options }));
         await rest.put(
           Routes.applicationGuildCommands(
             Config.BOT_CLIENT_ID,
