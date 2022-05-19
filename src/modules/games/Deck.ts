@@ -1,5 +1,32 @@
 import _ from 'lodash';
-import type { Card } from '../../types/Game';
+
+export enum Suit {
+  Club,
+  Diamond,
+  Heart,
+  Spade,
+}
+
+export enum Rank {
+  Ace = 1,
+  Two,
+  Three,
+  Four,
+  Five,
+  Six,
+  Seven,
+  Eight,
+  Nine,
+  Ten,
+  Jack,
+  Queen,
+  King,
+}
+
+export interface Card {
+  suit: Suit,
+  rank: Rank
+}
 
 export default class Deck {
   private readonly cards: Card[] = [];
