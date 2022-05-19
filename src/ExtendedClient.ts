@@ -43,12 +43,13 @@ export default class ExtendedClient extends Client {
     Logger.setDevMode();
     // else Logger.setProdMode();
     Logger.info(chalk.yellow('INITIALIZING...'));
+    Database.initialize();
+
     await this.loadEvents();
 
     await this.commands.load();
-    await this.commands.update();
+    // await this.commands.update();
 
-    Database.initialize();
     await this.login(Config.DISCORD_TOKEN);
   }
 }

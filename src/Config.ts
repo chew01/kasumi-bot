@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import type { GatewayIntentsString } from 'discord.js';
+import type { ActivityType, GatewayIntentsString } from 'discord.js';
 
 const Income = require('../config/income.json');
 const Games = require('../config/games.json');
@@ -98,6 +98,11 @@ namespace Config {
   export const ERROR_MSG: string = Settings.messages.error;
 
   export const TRADE_EXPIRY: number = Settings.trade.expiry;
+
+  export const ACTIVITY_DESCRIPTION: string = Settings.activity.description;
+
+  export const ACTIVITY_TYPE: ActivityType.Listening | ActivityType.Competing |
+  ActivityType.Playing | ActivityType.Watching | ActivityType.Streaming = Settings.activity.type;
 }
 
 export default Config;

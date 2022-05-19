@@ -1,4 +1,8 @@
 {
+  "activity": {
+    "type": 0,
+    "description": "Pretty Derby"
+  },
   "intents": [
     "DirectMessages",
     "Guilds",
