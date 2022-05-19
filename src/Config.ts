@@ -1,8 +1,9 @@
 import 'dotenv/config';
 import type { GatewayIntentsString } from 'discord.js';
 
-const GatewayIntents = require('../config/gatewayIntents.json');
 const Income = require('../config/income.json');
+const Games = require('../config/games.json');
+const Settings = require('../config/settings.json');
 
 class Config {
   private static populateConfig() {
@@ -36,17 +37,67 @@ class Config {
 }
 
 namespace Config {
-  export const GATEWAY_INTENTS: GatewayIntentsString[] = GatewayIntents.intents;
+  export const GATEWAY_INTENTS: GatewayIntentsString[] = Settings.intents;
+
+  export const BASE_DAILY_INCOME: number = Income.jobs.daily.baseDailyIncome;
 
   export const STREAK_REWARD_NAME: string = Income.jobs.daily.streakRewardName;
 
   export const STREAK_REWARD_QUANTITY: number = Income.jobs.daily.streakRewardQuantity;
+
+  export const FISHING_COOLDOWN: number = Income.jobs.fish.cooldown;
+
+  export const FISHING_MIN_REWARD: number = Income.jobs.fish.minimum;
+
+  export const FISHING_MAX_REWARD: number = Income.jobs.fish.maximum;
+
+  export const MINING_COOLDOWN: number = Income.jobs.mine.cooldown;
+
+  export const MINING_MIN_REWARD: number = Income.jobs.mine.minimum;
+
+  export const MINING_MAX_REWARD: number = Income.jobs.mine.maximum;
 
   export const MESSAGE_REWARD_COOLDOWN: number = Income.activity.message.cooldown;
 
   export const MESSAGE_REWARD_BASE: number = Income.activity.message.baseIncome;
 
   export const MESSAGE_REWARD_NITRO: number = Income.activity.message.nitroIncome;
+
+  export const BLACKJACK_MIN_BET: number = Games.gambling.blackjack.minimumBet;
+
+  export const BLACKJACK_MAX_BET: number = Games.gambling.blackjack.maximumBet;
+
+  export const BLACKJACK_MULTIPLIER: number = Games.gambling.blackjack.multiplier;
+
+  export const BLACKJACK_INACTIVITY: number = Games.gambling.blackjack.inactivity;
+
+  export const ROULETTE_MIN_BET: number = Games.gambling.roulette.minimumBet;
+
+  export const ROULETTE_MAX_BET: number = Games.gambling.roulette.maximumBet;
+
+  export const ROULETTE_MULTIPLIER: number = Games.gambling.roulette.multiplier;
+
+  export const ROULETTE_JACKPOT: number = Games.gambling.roulette.jackpotMultiplier;
+
+  export const COINFLIP_MIN_BET: number = Games.gambling.coinflip.minimumBet;
+
+  export const COINFLIP_MAX_BET: number = Games.gambling.coinflip.maximumBet;
+
+  export const COINFLIP_MULTIPLIER: number = Games.gambling.coinflip.multiplier;
+
+  export const SLOTS_MIN_BET: number = Games.gambling.slots.minimumBet;
+
+  export const SLOTS_MAX_BET: number = Games.gambling.slots.maximumBet;
+
+  export const SLOTS_ICONS: string[] = Games.gambling.slots.icons;
+
+  export const SLOTS_WEIGHTAGE: number[] = Games.gambling.slots.weightage;
+
+  export const SLOTS_MULTIPLIER: number[] = Games.gambling.slots.multiplier;
+
+  export const ERROR_MSG: string = Settings.messages.error;
+
+  export const TRADE_EXPIRY: number = Settings.trade.expiry;
 }
 
 export default Config;

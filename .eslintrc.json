@@ -20,7 +20,7 @@
     },
     "overrides": [
         {
-            "files": ["./src/commands/dev/**/*.ts", "./src/events/*.ts"],
+            "files": ["./src/commands/server/**/*.ts", "./src/events/**/*.ts"],
             "rules": {
                 "class-methods-use-this": "off"
             }
