@@ -1,11 +1,13 @@
+import Config from '../../Config';
+
 export default class Slots {
   private slots: string[] = [];
 
-  private weightage = [0.05, 0.15, 0.2, 0.2, 0.4];
+  private weightage: number[] = Config.SLOTS_WEIGHTAGE;
 
-  private results = ['<:luckyseven:976209029003083796>', '🍋', '🍇', '🍒', '🫐'];
+  private results: string[] = Config.SLOTS_ICONS;
 
-  private multiplier = [20, 12, 8, 4, 2];
+  private multiplier: number[] = Config.SLOTS_MULTIPLIER;
 
   constructor() {
     for (let i = 0; i < 9; i += 1) {

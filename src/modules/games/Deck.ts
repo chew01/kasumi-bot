@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import type { Card } from '../types/Game';
+import type { Card } from '../../types/Game';
 
 export default class Deck {
   private readonly cards: Card[] = [];

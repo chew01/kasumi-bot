@@ -1,6 +1,23 @@
 import Deck from './Deck';
-import type { Card } from '../types/Game';
-import { Rank } from '../types/Game';
+import type { Card } from '../../types/Game';
+import { Rank } from '../../types/Game';
+
+type WinnerType = 'PlayerBust' | 'DealerBust' | 'Player' | 'Dealer' | 'Draw' | 'None';
+
+type StartingHands = {
+  playerCards: Card[],
+  dealerCards: Card[],
+  playerStartingCount: number,
+  dealerStartingCount: number,
+};
+
+type BlackjackData = {
+  winner: WinnerType,
+  playerCards: Card[],
+  dealerCards: Card[],
+  playerCount: number,
+  dealerCount: number,
+};
 
 export default class Blackjack {
   private cards: Card[];
@@ -9,27 +26,27 @@ export default class Blackjack {
 
   private dealerCards: Card[] = [];
 
-  private winner: 'PlayerBust' | 'DealerBust' | 'Player' | 'Dealer' | 'Draw' | 'None' = 'None';
+  private winner: WinnerType = 'None';
 
   constructor() {
     this.cards = new Deck().get();
   }
 
-  public playerDraw() {
+  public playerDraw(): void {
     const card = this.cards.pop();
     if (!card) throw new Error('Player drew empty card!');
     this.playerCards.push(card);
     this.checkBust();
   }
 
-  public dealerDraw() {
+  public dealerDraw(): void {
     const card = this.cards.pop();
     if (!card) throw new Error('Dealer drew empty card!');
     this.dealerCards.push(card);
     this.checkBust();
   }
 
-  private static count(hand: Card[]) {
+  private static count(hand: Card[]): number {
     if (!hand[0] || !hand[1]) return 0;
     if (hand[0].rank === Rank.Ace
         && [Rank.Ten, Rank.Jack, Rank.Queen, Rank.King].includes(hand[1].rank)) return 21;
@@ -57,14 +74,14 @@ export default class Blackjack {
     return sum + aces.length;
   }
 
-  private static countOne(hand: Card[]) {
+  private static countOne(hand: Card[]): number {
     if (!hand[0]) return 0;
     if ([Rank.Ten, Rank.Jack, Rank.Queen, Rank.King].includes(hand[0].rank)) return 10;
     if (hand[0].rank === Rank.Ace) return 11;
     return hand[0].rank;
   }
 
-  public start() {
+  public start(): StartingHands {
     this.playerDraw();
     this.playerDraw();
     this.dealerDraw();
@@ -77,7 +94,7 @@ export default class Blackjack {
     };
   }
 
-  private forceEnd() {
+  private calculate(): void {
     if (Blackjack.count(this.playerCards) > Blackjack.count(this.dealerCards)) {
       this.winner = 'Player';
       return;
@@ -89,54 +106,7 @@ export default class Blackjack {
     this.winner = 'Draw';
   }
 
-  private checkBust() {
-    if (Blackjack.count(this.playerCards) > 21) this.winner = 'PlayerBust';
-    if (Blackjack.count(this.dealerCards) > 21) this.winner = 'DealerBust';
-  }
-
-  private hitNatural() {
-    this.dealerPlay();
-    if (Blackjack.count(this.dealerCards) === 21) {
-      this.winner = 'Draw';
-      return;
-    }
-    this.winner = 'Player';
-  }
-
-  private dealerPlay() {
-    while (Blackjack.count(this.dealerCards) < 17) {
-      this.dealerDraw();
-    }
-  }
-
-  public playerHit() {
-    this.playerDraw();
-    if (Blackjack.count(this.playerCards) === 21) this.hitNatural();
-  }
-
-  public playerStand() {
-    if (Blackjack.count(this.playerCards) >= Blackjack.count(this.dealerCards)) this.dealerPlay();
-    if (this.winner === 'None') this.forceEnd();
-  }
-
-  public playerDouble() {
-    this.playerDraw();
-    if (Blackjack.count(this.playerCards) === 21) this.hitNatural();
-    if (Blackjack.count(this.playerCards) < 21 && this.winner === 'None') this.dealerPlay();
-    if (this.winner === 'None') this.forceEnd();
-  }
-
-  public getData() {
-    return {
-      winner: this.winner,
-      playerCards: this.playerCards,
-      dealerCards: this.dealerCards,
-      playerCount: Blackjack.count(this.playerCards),
-      dealerCount: Blackjack.count(this.dealerCards),
-    };
-  }
-
-  public checkNatural() {
+  public checkNatural(): WinnerType {
     if (Blackjack.count(this.playerCards) === 21 && Blackjack.count(this.dealerCards) === 21) {
       this.winner = 'Draw';
       return this.winner;
@@ -146,5 +116,52 @@ export default class Blackjack {
       return this.winner;
     }
     return this.winner;
+  }
+
+  private checkBust(): void {
+    if (Blackjack.count(this.playerCards) > 21) this.winner = 'PlayerBust';
+    if (Blackjack.count(this.dealerCards) > 21) this.winner = 'DealerBust';
+  }
+
+  private hitNatural(): void {
+    this.dealerPlay();
+    if (Blackjack.count(this.dealerCards) === 21) {
+      this.winner = 'Draw';
+      return;
+    }
+    this.winner = 'Player';
+  }
+
+  private dealerPlay(): void {
+    while (Blackjack.count(this.dealerCards) < 17) {
+      this.dealerDraw();
+    }
+  }
+
+  public playerHit(): void {
+    this.playerDraw();
+    if (Blackjack.count(this.playerCards) === 21) this.hitNatural();
+  }
+
+  public playerStand(): void {
+    if (Blackjack.count(this.playerCards) >= Blackjack.count(this.dealerCards)) this.dealerPlay();
+    if (this.winner === 'None') this.calculate();
+  }
+
+  public playerDouble(): void {
+    this.playerDraw();
+    if (Blackjack.count(this.playerCards) === 21) this.hitNatural();
+    if (Blackjack.count(this.playerCards) < 21 && this.winner === 'None') this.dealerPlay();
+    if (this.winner === 'None') this.calculate();
+  }
+
+  public getData(): BlackjackData {
+    return {
+      winner: this.winner,
+      playerCards: this.playerCards,
+      dealerCards: this.dealerCards,
+      playerCount: Blackjack.count(this.playerCards),
+      dealerCount: Blackjack.count(this.dealerCards),
+    };
   }
 }
