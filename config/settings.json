@@ -1,0 +1,13 @@
+{
+  "intents": [
+    "DirectMessages",
+    "Guilds",
+    "GuildMessages"
+  ],
+  "messages": {
+    "error": "Oops, we ran into an error. Try again!"
+  },
+  "trade": {
+    "expiry": 600000
+  }
+}

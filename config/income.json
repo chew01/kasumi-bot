@@ -1,0 +1,26 @@
+{
+  "jobs": {
+    "daily": {
+      "baseDailyIncome": 100,
+      "streakRewardName": "Daily Loot Box",
+      "streakRewardQuantity": 1
+    },
+    "fish": {
+      "cooldown": 14400000,
+      "minimum": 100,
+      "maximum": 300
+    },
+    "mine": {
+      "cooldown": 21600000,
+      "minimum": 50,
+      "maximum": 500
+    }
+  },
+  "activity": {
+    "message": {
+      "cooldown": 900000,
+      "baseIncome": 2,
+      "nitroIncome": 3
+    }
+  }
+}
