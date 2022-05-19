@@ -62,6 +62,7 @@ class RouletteCommand extends SlashCommand {
     const embed = new EmbedBuilder()
       .setTitle('Roulette')
       .setDescription(`${resString}\n${betString}`)
+      .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .addFields([{ name: 'Result', value: result }]);
 
     return interaction.reply({ embeds: [embed] });

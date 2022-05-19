@@ -42,7 +42,10 @@ class SlotsCommand extends SlashCommand {
     const description = `You bet ${CurrencyUtils.format(bet)}.`;
     const line = '------------------';
 
-    let embed = new EmbedBuilder().setTitle('Slots').setDescription(`${description}\n${line}\n${display}\n${line}`);
+    let embed = new EmbedBuilder()
+      .setTitle('Slots')
+      .setDescription(`${description}\n${line}\n${display}\n${line}`)
+      .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() });
     await interaction.reply({ embeds: [embed] });
 
     // Second column

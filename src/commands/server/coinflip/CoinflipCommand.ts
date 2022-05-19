@@ -63,6 +63,7 @@ class CoinflipCommand extends SlashCommand {
     const embed = new EmbedBuilder()
       .setTitle('Coin Flip!')
       .setDescription(description)
+      .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .addFields([{ name: 'Result', value: result }]);
 
     return interaction.reply({ embeds: [embed] });
