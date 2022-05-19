@@ -8,7 +8,7 @@ import CurrencyUtils from '../../../utils/CurrencyUtils';
 class DailyCommand extends SlashCommand {
   public name: string = 'daily';
 
-  public description: string = 'Get daily login rewards (refresh at 5AM EST)';
+  public description: string = 'Get daily login rewards (refresh at 12AM EST)';
 
   public options: ApplicationCommandOptionData[] = [];
 

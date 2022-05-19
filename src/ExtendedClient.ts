@@ -48,7 +48,7 @@ export default class ExtendedClient extends Client {
     await this.loadEvents();
 
     await this.commands.load();
-    // await this.commands.update();
+    await this.commands.update();
 
     await this.login(Config.DISCORD_TOKEN);
   }
