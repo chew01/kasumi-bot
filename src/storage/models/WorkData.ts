@@ -1,5 +1,6 @@
 import Database from '../Database';
 import Logger from '../../services/Logger';
+import Config from '../../Config';
 
 type DailyData = {
   last_daily: number,
@@ -27,12 +28,18 @@ export default class WorkData {
           SET coin = coin = @coin
           WHERE user_id = @user_id`,
         `INSERT INTO member_inventory (user_id, item_name, quantity) 
-          VALUES (@user_id, 'Daily Loot Box', 1)
-          ON CONFLICT DO UPDATE SET quantity = quantity + 1`,
+          VALUES (@user_id, @reward_name, @reward_quantity)
+          ON CONFLICT DO UPDATE SET quantity = quantity + @reward_quantity`,
       ];
       const txn = Database.transact(stmt);
       try {
-        txn({ user_id, time, coin });
+        txn({
+          user_id,
+          time,
+          coin,
+          reward_name: Config.STREAK_REWARD_NAME,
+          reward_quantity: Config.STREAK_REWARD_QUANTITY,
+        });
         return true;
       } catch (err) {
         if (err instanceof Error) Logger.error(err.message);
