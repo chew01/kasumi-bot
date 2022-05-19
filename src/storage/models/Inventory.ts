@@ -1,7 +1,7 @@
 import Database from '../Database';
 import Logger from '../../services/Logger';
 
-export type InventoryType = {
+type InventoryType = {
   item_name: string,
   quantity: number,
   role_id: string
