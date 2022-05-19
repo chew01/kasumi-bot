@@ -10,4 +10,10 @@ export default class MathUtils {
 
     return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
   }
+
+  public static msToMinutes(ms: number, decimals = 2) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Number(((ms % 60000) / 1000).toFixed(decimals));
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
 }
