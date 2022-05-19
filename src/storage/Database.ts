@@ -2,7 +2,7 @@ import BetterSQLite3 from 'better-sqlite3';
 import initializeDB from './initializeDB';
 
 export default class Database {
-  private static path = './bot.db';
+  private static path: string = './bot.db';
 
   public static connect(): BetterSQLite3.Database {
     return BetterSQLite3(Database.path);
@@ -15,7 +15,7 @@ export default class Database {
     return res;
   }
 
-  public static transact(stmt: string[]) {
+  public static transact(stmt: string[]): BetterSQLite3.Transaction {
     const conn = this.connect();
     const statements = stmt.map((sql) => conn.prepare(sql));
     return conn.transaction((args) => {
@@ -37,7 +37,7 @@ export default class Database {
     return res;
   }
 
-  public static initialize() {
+  public static initialize(): void {
     const conn = this.connect();
     const statements = initializeDB.map((stmt) => conn.prepare(stmt));
     statements.forEach((stmt) => stmt.run());
