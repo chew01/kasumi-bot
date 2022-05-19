@@ -1,26 +1,19 @@
-import Member from '../storage/Member';
+import Member from '../storage/models/Member';
 
 class MemberCache {
   private members: Set<string>;
 
   constructor() {
     this.members = new Set<string>();
-    const stored = Member.getMembers();
-    if (stored) {
-      stored.forEach((obj) => {
-        this.members.add(obj.user_id);
-      });
-    }
+    const stored = Member.getMemberIds();
+    if (stored) stored.forEach((id) => this.members.add(id));
   }
 
-  public initialiseIfNotExists(user_id: string) {
-    const check = this.members.has(user_id);
-    if (!check) {
-      const op = Member.initialise(user_id);
-      if (!op) return false;
+  public initialiseIfNotExists(user_id: string): void {
+    if (!this.members.has(user_id)) {
+      Member.initialise(user_id);
       this.members.add(user_id);
     }
-    return true;
   }
 }
 
