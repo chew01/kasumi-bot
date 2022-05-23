@@ -4,7 +4,7 @@ import Config from '../Config';
 class ActivityChannelCache {
   private readonly activityChannelIds: Set<string>;
 
-  private activityUserIds: Set<string>;
+  private readonly activityUserIds: Set<string>;
 
   public constructor() {
     this.activityChannelIds = new Set<string>();
