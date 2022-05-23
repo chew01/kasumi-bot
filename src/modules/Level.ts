@@ -24,6 +24,15 @@ export default class Level {
       return;
     }
 
+    // If member is above level 5 and does not have role
+    if (data.previousLevel === data.level && data.level >= 5) {
+      const qualifiedRole = Config.LEVEL_ROLES[Math.floor(data.level / 5)];
+      if (qualifiedRole && !member.roles.cache.some((role) => role.id === qualifiedRole)) {
+        await member.roles.add(qualifiedRole);
+      }
+      return;
+    }
+
     if (data.previousLevel >= data.level) return;
 
     // If member just reached Level 5
