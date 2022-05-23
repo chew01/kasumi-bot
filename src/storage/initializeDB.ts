@@ -2,7 +2,11 @@ const initializeDB = [
   `CREATE TABLE IF NOT EXISTS member (
     user_id TEXT PRIMARY KEY,
     coin INTEGER NOT NULL,
-    CHECK ( coin >= 0 )
+    experience INTEGER NOT NULL,
+    level INTEGER NOT NULL,
+    CHECK ( coin >= 0 AND
+            experience >= 0 AND
+            level >= 0)
     );`,
 
   `CREATE TABLE IF NOT EXISTS item_type (

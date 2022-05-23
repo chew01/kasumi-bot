@@ -18,9 +18,23 @@
   },
   "activity": {
     "message": {
-      "cooldown": 900000,
-      "baseIncome": 2,
-      "nitroIncome": 3
+      "incomeCooldown": 120000,
+      "baseIncomeMinimum": 3,
+      "baseIncomeMaximum": 5,
+      "nitroIncomeMinimum": 5,
+      "nitroIncomeMaximum": 7,
+      "experienceCooldown": 120000,
+      "baseExperienceMinimum": 10,
+      "baseExperienceMaximum": 15,
+      "nitroExperienceMinimum": 15,
+      "nitroExperienceMaximum": 20
+    },
+    "voice": {
+      "experienceCooldown": 60000,
+      "baseExperienceMinimum": 10,
+      "baseExperienceMaximum": 15,
+      "nitroExperienceMinimum": 15,
+      "nitroExperienceMaximum": 20
     }
   }
 }

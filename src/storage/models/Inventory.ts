@@ -19,6 +19,15 @@ export default class Inventory {
     return !!Database.fetchOne('SELECT 1 FROM member_inventory WHERE user_id = @user_id AND item_name = @item_name', { user_id, item_name });
   }
 
+  public static give(user_id: string, item_name: string, quantity: number): void {
+    Database.execute(
+      `INSERT INTO member_inventory (user_id, item_name, quantity) 
+              VALUES (@user_id, @item_name, @quantity)
+              ON CONFLICT DO UPDATE SET quantity = quantity + excluded.quantity`,
+      { user_id, item_name, quantity },
+    );
+  }
+
   public static getQuantityOwned(user_id:string, item_name: string): number {
     const res = Database.fetchOne('SELECT quantity FROM member_inventory WHERE user_id = @user_id AND item_name = @item_name', { user_id, item_name });
     return res.quantity || 0;
