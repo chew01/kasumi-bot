@@ -16,4 +16,12 @@ export default class MathUtils {
     const seconds = Number(((ms % 60000) / 1000).toFixed(decimals));
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
+
+  public static formatExperience(level: number) {
+    return 50 * level * (level + 1);
+  }
+
+  public static randomInRange(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
 }
