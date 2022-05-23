@@ -22,7 +22,7 @@ export const shopAddItemSC: ApplicationCommandSubCommandData = {
       name: 'price',
       description: 'The price of the item',
       type: ApplicationCommandOptionType.Integer,
-      minValue: 0,
+      min_value: 0,
       required: true,
     },
   ],

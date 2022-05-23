@@ -27,10 +27,10 @@ export async function shopBuyRole(interaction: ChatInputCommandInteraction) {
   const role = interaction.options.getRole('role');
   if (!role) return interaction.reply({ content: 'You did not choose a valid role. Try again!' });
 
-  if (!interaction.inCachedGuild() || !interaction.guild.me) {
+  if (!interaction.inCachedGuild() || !interaction.guild.members.me) {
     return interaction.reply({ content: Config.ERROR_MSG });
   }
-  if (interaction.guild.me.roles.highest.comparePositionTo(role.id) < 0) return interaction.reply({ content: 'That role is above the bot! Contact a moderator.' });
+  if (interaction.guild.members.me.roles.highest.comparePositionTo(role.id) <= 0) return interaction.reply({ content: 'That role is above the bot! Contact a moderator.' });
   if (role === interaction.guild.roles.premiumSubscriberRole) return interaction.reply({ content: 'You can\'t buy the Nitro Booster role!' });
 
   if (!Shop.has(role.name)) return interaction.reply({ content: 'The role you chose is not in the shop.' });
@@ -42,5 +42,5 @@ export async function shopBuyRole(interaction: ChatInputCommandInteraction) {
 
   await interaction.member.roles.add(role.id);
 
-  return interaction.reply({ content: `You bought the **${role.name}** role! You can use it in your inventory. You now have ${CurrencyUtils.formatEmoji(bal)}` });
+  return interaction.reply({ content: `You bought the **${role.name}** role! You now have ${CurrencyUtils.formatEmoji(bal)}` });
 }

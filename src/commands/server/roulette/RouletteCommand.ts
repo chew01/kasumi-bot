@@ -18,16 +18,16 @@ class RouletteCommand extends SlashCommand {
     name: 'bet',
     description: `Amount of ${Config.CURRENCY_NAME_PLURAL} to bet`,
     type: ApplicationCommandOptionType.Integer,
-    minValue: Config.ROULETTE_MIN_BET,
-    maxValue: Config.ROULETTE_MAX_BET,
+    min_value: Config.ROULETTE_MIN_BET,
+    max_value: Config.ROULETTE_MAX_BET,
     required: true,
   },
   {
     name: 'number',
     description: 'Choose a number from 0 to 37',
     type: ApplicationCommandOptionType.Integer,
-    minValue: 0,
-    maxValue: 37,
+    min_value: 0,
+    max_value: 37,
     required: true,
   }];
 

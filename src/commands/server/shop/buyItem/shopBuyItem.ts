@@ -23,7 +23,7 @@ export const shopBuyItemSC: ApplicationCommandSubCommandData = {
       name: 'quantity',
       description: 'The quantity to be bought',
       type: ApplicationCommandOptionType.Integer,
-      minValue: 0,
+      min_value: 0,
       required: true,
     },
   ],

@@ -16,6 +16,7 @@ export const activityCommandAddSC: ApplicationCommandSubCommandData = {
       name: 'channel',
       description: 'The channel to be added',
       type: ApplicationCommandOptionType.Channel,
+      required: true,
     },
   ],
 };

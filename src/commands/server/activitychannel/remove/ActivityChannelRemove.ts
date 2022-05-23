@@ -16,6 +16,7 @@ export const activityCommandRemoveSC: ApplicationCommandSubCommandData = {
       name: 'channel',
       description: 'The channel to be removed',
       type: ApplicationCommandOptionType.Channel,
+      required: true,
     },
   ],
 };

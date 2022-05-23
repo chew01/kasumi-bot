@@ -14,9 +14,9 @@ class FishCommand extends SlashCommand {
 
   async run(interaction: CommandInteraction) {
     const lastFished = WorkData.getFish(interaction.user.id);
-    const nextReset = lastFished + Config.FISHING_COOLDOWN;
+    const nextReset = new Date(lastFished + Config.FISHING_COOLDOWN);
 
-    if (Date.now() < nextReset) return interaction.reply({ content: `You've just fished recently! Try again ${Formatters.time(nextReset, 'R')}` });
+    if (new Date() < nextReset) return interaction.reply({ content: `You've just fished recently! Try again ${Formatters.time(nextReset, 'R')}` });
 
     const earnings = Config.FISHING_MIN_REWARD
         + Math.floor(Math.random() * (Config.FISHING_MAX_REWARD - Config.FISHING_MIN_REWARD));

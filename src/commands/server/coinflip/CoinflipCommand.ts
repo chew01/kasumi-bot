@@ -18,8 +18,8 @@ class CoinflipCommand extends SlashCommand {
     name: 'bet',
     description: `Amount of ${Config.CURRENCY_NAME_PLURAL} to bet`,
     type: ApplicationCommandOptionType.Integer,
-    minValue: Config.COINFLIP_MIN_BET,
-    maxValue: Config.COINFLIP_MAX_BET,
+    min_value: Config.COINFLIP_MIN_BET,
+    max_value: Config.COINFLIP_MAX_BET,
     required: true,
   },
   {
@@ -55,7 +55,7 @@ class CoinflipCommand extends SlashCommand {
 
     if (result === side) {
       bal = Member.addMoney(interaction.user.id, bet * Config.COINFLIP_MULTIPLIER);
-      result = `\nYou won ${CurrencyUtils.format(bet)}! You now have ${CurrencyUtils.formatEmoji(bal)}`;
+      result = `\nYou won ${CurrencyUtils.format(bet * Config.COINFLIP_MULTIPLIER)}! You now have ${CurrencyUtils.formatEmoji(bal)}`;
     } else {
       result = `\nYou lost. You now have ${CurrencyUtils.formatEmoji(bal)}`;
     }

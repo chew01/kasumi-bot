@@ -23,8 +23,8 @@ class BlackjackCommand extends SlashCommand {
     name: 'bet',
     description: `Amount of ${Config.CURRENCY_NAME_PLURAL} to bet`,
     type: ApplicationCommandOptionType.Integer,
-    minValue: Config.BLACKJACK_MIN_BET,
-    maxValue: Config.BLACKJACK_MAX_BET,
+    min_value: Config.BLACKJACK_MIN_BET,
+    max_value: Config.BLACKJACK_MAX_BET,
     required: true,
   }];
 

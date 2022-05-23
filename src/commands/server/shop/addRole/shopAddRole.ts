@@ -23,7 +23,7 @@ export const shopAddRoleSC: ApplicationCommandSubCommandData = {
       name: 'price',
       description: 'The price of the role',
       type: ApplicationCommandOptionType.Integer,
-      minValue: 0,
+      min_value: 0,
       required: true,
     },
   ],
@@ -35,10 +35,10 @@ export async function shopAddRole(interaction: ChatInputCommandInteraction) {
   const price = interaction.options.getInteger('price');
   if (price === null || price < 0) return interaction.reply({ content: 'You did not choose a valid price. Try again!' });
 
-  if (!interaction.inCachedGuild() || !interaction.guild.me) {
+  if (!interaction.inCachedGuild() || !interaction.guild.members.me) {
     return interaction.reply({ content: Config.ERROR_MSG });
   }
-  if (interaction.guild.me.roles.highest.comparePositionTo(role.id) < 0) return interaction.reply({ content: 'That role is above the bot!' });
+  if (interaction.guild.members.me.roles.highest.comparePositionTo(role.id) <= 0) return interaction.reply({ content: 'That role is above the bot!' });
   if (role === interaction.guild.roles.premiumSubscriberRole) return interaction.reply({ content: 'You can\'t give the Nitro Booster role!' });
 
   if (Shop.has(role.name)) return interaction.reply({ content: 'The role you chose is already in the shop.' });

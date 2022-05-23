@@ -14,9 +14,9 @@ class MineCommand extends SlashCommand {
 
   async run(interaction: CommandInteraction) {
     const lastMined = WorkData.getMine(interaction.user.id);
-    const nextReset = lastMined + Config.MINING_COOLDOWN;
+    const nextReset = new Date(lastMined + Config.MINING_COOLDOWN);
 
-    if (Date.now() < nextReset) return interaction.reply({ content: `You've just mined recently! Try again ${Formatters.time(nextReset, 'R')}` });
+    if (new Date() < nextReset) return interaction.reply({ content: `You've just mined recently! Try again ${Formatters.time(nextReset, 'R')}` });
 
     const earnings = Config.MINING_MIN_REWARD
         + Math.floor(Math.random() * (Config.MINING_MAX_REWARD - Config.MINING_MIN_REWARD));
