@@ -6,7 +6,9 @@
   "intents": [
     "DirectMessages",
     "Guilds",
-    "GuildMessages"
+    "GuildMessages",
+    "GuildVoiceStates",
+    "GuildMembers"
   ],
   "messages": {
     "error": "Oops, we ran into an error. Try again!"
