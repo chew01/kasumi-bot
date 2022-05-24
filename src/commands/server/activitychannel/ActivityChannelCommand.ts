@@ -1,8 +1,8 @@
 import type { ApplicationCommandOptionData, CommandInteraction } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
-import { activityChannelList, activityCommandListSC } from './list/ActivityChannelList';
-import { activityChannelAdd, activityCommandAddSC } from './add/ActivityChannelAdd';
-import { activityChannelRemove, activityCommandRemoveSC } from './remove/ActivityChannelRemove';
+import { activityChannelList, activityCommandListSC } from './list/activityChannelList';
+import { activityChannelAdd, activityCommandAddSC } from './add/activityChannelAdd';
+import { activityChannelRemove, activityCommandRemoveSC } from './remove/activityChannelRemove';
 import Config from '../../../Config';
 
 class ActivityChannelCommand extends SlashCommand {
