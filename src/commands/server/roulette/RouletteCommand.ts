@@ -53,8 +53,7 @@ class RouletteCommand extends SlashCommand {
     if (num === res) {
       bal = Member.addMoney(interaction.user.id, bet * Config.ROULETTE_JACKPOT);
       result = `You won! You earned ${CurrencyUtils.format(bet * Config.ROULETTE_JACKPOT)}.\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
-    }
-    if (resDiv === betDiv) {
+    } else if (resDiv === betDiv) {
       bal = Member.addMoney(interaction.user.id, bet * Config.ROULETTE_MULTIPLIER);
       result = `You bet on the same type of number (${resDiv}). You earned ${CurrencyUtils.format(bet * Config.ROULETTE_MULTIPLIER)}.\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
     }
