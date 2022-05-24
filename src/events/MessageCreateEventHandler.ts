@@ -15,11 +15,11 @@ class InteractionCreateEventHandler extends BotEventHandler {
 
   async execute(_client: ExtendedClient, message: Message) {
     if (message.author.bot || !message.member) return null;
+    MemberCache.initialiseIfNotExists(message.author.id);
+
     if (ActivityChannelCache.checkChannel(message.channel.id)) {
       const onCooldown = ActivityChannelCache.checkUser(message.author.id);
       if (!onCooldown) {
-        MemberCache.initialiseIfNotExists(message.author.id);
-
         let income: number;
         let exp: number;
 
@@ -44,9 +44,7 @@ class InteractionCreateEventHandler extends BotEventHandler {
         }
 
         Member.addMoney(message.author.id, income);
-
         const level = Member.addExperience(message.author.id, exp);
-
         await Level.check(level, message.member, message);
 
         ActivityChannelCache.addUser(message.author.id);

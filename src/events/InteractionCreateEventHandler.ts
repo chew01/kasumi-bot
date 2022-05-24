@@ -3,6 +3,7 @@ import BotEventHandler from '../types/BotEventHandler';
 import Logger from '../services/Logger';
 import type ExtendedClient from '../ExtendedClient';
 import MemberCache from '../cache/MemberCache';
+import Ticket from '../modules/Ticket';
 
 class InteractionCreateEventHandler extends BotEventHandler {
   name = 'interactionCreate';
@@ -33,6 +34,15 @@ class InteractionCreateEventHandler extends BotEventHandler {
         }
       }
     }
+
+    if (interaction.isButton()) {
+      if (interaction.customId === 'create-ticket') return Ticket.openModal(interaction);
+    }
+
+    if (interaction.isModalSubmit()) {
+      if (interaction.customId === 'ticket-modal') return Ticket.create(interaction);
+    }
+
     return null;
   }
 }
