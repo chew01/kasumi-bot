@@ -45,7 +45,12 @@ const initializeDB = [
 
   `CREATE TABLE IF NOT EXISTS activity_channel (
     channel_id TEXT PRIMARY KEY
-   );`,
+    );`,
+
+  `CREATE TABLE IF NOT EXISTS variable (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+    );`,
 ];
 
 export default initializeDB;
