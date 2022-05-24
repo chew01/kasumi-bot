@@ -17,56 +17,67 @@ export default class Level {
     member: GuildMember,
     message?: Message,
   ): Promise<void> {
-    // If member Level 1 and does not have Level 1 role
-    if (data.level === 1 && Config.LEVEL_ROLES[0]
-        && !member.roles.cache.some((role) => role.id === Config.LEVEL_ROLES[0])) {
-      await member.roles.add(Config.LEVEL_ROLES[0]);
-      return;
-    }
-
-    // If member is above level 5 and does not have role
-    if (data.previousLevel === data.level && data.level >= 5) {
-      const qualifiedRole = Config.LEVEL_ROLES[Math.floor(data.level / 5)];
-      if (qualifiedRole && !member.roles.cache.some((role) => role.id === qualifiedRole)) {
-        await member.roles.add(qualifiedRole);
+    // No change in levels (joined)
+    if (data.level === data.previousLevel) {
+      // If member less than Level 5 and does not have Level 1 role
+      if (data.level < 5 && Config.LEVEL_ROLES[0]
+          && !member.roles.cache.some((role) => role.id === Config.LEVEL_ROLES[0])) {
+        await member.roles.add(Config.LEVEL_ROLES[0]);
+        return;
       }
-      return;
-    }
 
-    if (data.previousLevel >= data.level) return;
-
-    // If member just reached Level 5
-    if (data.level === 5 && Config.LEVEL_ROLES[0] && Config.LEVEL_ROLES[1]) {
-      await member.roles.remove(Config.LEVEL_ROLES[0]);
-      await member.roles.add(Config.LEVEL_ROLES[1]);
-      Inventory.give(member.id, 'Chat Loot Box', 1);
-
-      if (message) await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
-      else await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
-      return;
-    }
-
-    // If member level just reached multiple of 5, up to 50
-    if (data.level % 5 === 0 && data.level <= 50) {
-      const prevRole = Config.LEVEL_ROLES[(data.level / 5) - 1];
-      const role = Config.LEVEL_ROLES[data.level / 5];
-
-      // Swap roles and inform
-      if (prevRole && role) {
-        await member.roles.remove(prevRole);
-        await member.roles.add(role);
-        Inventory.give(member.id, 'Chat Loot Box', 1);
-        if (message) await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
-        else await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+      // If member is above level 5 and does not have role
+      if (data.previousLevel === data.level && data.level >= 5) {
+        const qualifiedRole = Config.LEVEL_ROLES[Math.floor(data.level / 5)];
+        if (qualifiedRole && !member.roles.cache.some((role) => role.id === qualifiedRole)) {
+          await member.roles.add(qualifiedRole);
+        }
         return;
       }
     }
 
-    // If member leveled up, send message
-    if (data.previousLevel < data.level) {
+    // New level is greater than previous level (level up)
+    if (data.level > data.previousLevel) {
+      // If member just reached Level 5
+      if (data.level === 5 && Config.LEVEL_ROLES[0] && Config.LEVEL_ROLES[1]) {
+        await member.roles.remove(Config.LEVEL_ROLES[0]);
+        await member.roles.add(Config.LEVEL_ROLES[1]);
+        Inventory.give(member.id, 'Chat Loot Box', 1);
+
+        if (message) {
+          await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+        } else {
+          await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+        }
+        return;
+      }
+
+      // If member level just reached multiple of 5, up to 50
+      if (data.level % 5 === 0 && data.level <= 50) {
+        const prevRole = Config.LEVEL_ROLES[(data.level / 5) - 1];
+        const role = Config.LEVEL_ROLES[data.level / 5];
+
+        // Swap roles and inform
+        if (prevRole && role) {
+          await member.roles.remove(prevRole);
+          await member.roles.add(role);
+          Inventory.give(member.id, 'Chat Loot Box', 1);
+          if (message) {
+            await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+          } else {
+            await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+          }
+          return;
+        }
+      }
+
+      // If member leveled up but not at milestone
       Inventory.give(member.id, 'Chat Loot Box', 1);
-      if (message) await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
-      else await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
+      if (message) {
+        await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
+      } else {
+        await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
+      }
     }
   }
 
