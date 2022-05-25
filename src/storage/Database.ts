@@ -2,7 +2,7 @@ import BetterSQLite3 from 'better-sqlite3';
 import initializeDB from './initializeDB';
 
 export default class Database {
-  private static path: string = './bot.db';
+  private static path: string = 'database/bot.db';
 
   public static connect(): BetterSQLite3.Database {
     return BetterSQLite3(Database.path);

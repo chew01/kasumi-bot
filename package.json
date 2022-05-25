@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "node build/ExtendedClient.js",
     "bot": "tsc && node build/ExtendedClient.js",
-    "watch": "ts-node-dev --transpile-only --poll src/ExtendedClient.ts"
+    "watch": "ts-node-dev --transpile-only --poll src/ExtendedClient.ts",
+    "docker": "docker-compose up --build"
   },
   "repository": {
     "type": "git",
