@@ -51,6 +51,11 @@ const initializeDB = [
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
     );`,
+
+  `CREATE TABLE IF NOT EXISTS bad_word (
+    word TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL
+    );`,
 ];
 
 export default initializeDB;
