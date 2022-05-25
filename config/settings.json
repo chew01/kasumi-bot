@@ -8,10 +8,17 @@
     "Guilds",
     "GuildMessages",
     "GuildVoiceStates",
-    "GuildMembers"
+    "GuildMembers",
+    "MessageContent"
   ],
   "messages": {
-    "error": "Oops, we ran into an error. Try again!"
+    "error": "Oops, we ran into an error. Try again!",
+    "badword": "No bad words allowed!"
+  },
+  "antiraid": {
+    "logExpiry": 30000,
+    "quota": 20,
+    "rateLimit": 60
   },
   "trade": {
     "expiry": 600000

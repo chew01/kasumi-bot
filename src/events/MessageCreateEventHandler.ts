@@ -1,4 +1,5 @@
 import type { Message } from 'discord.js';
+import { Formatters } from 'discord.js';
 import BotEventHandler from '../types/BotEventHandler';
 import type ExtendedClient from '../ExtendedClient';
 import ActivityChannelCache from '../cache/ActivityChannelCache';
@@ -7,6 +8,8 @@ import MemberCache from '../cache/MemberCache';
 import Config from '../Config';
 import Level from '../modules/Level';
 import MathUtils from '../utils/MathUtils';
+import BadWordCache from '../cache/BadWordCache';
+import AntiRaid from '../modules/AntiRaid';
 
 class InteractionCreateEventHandler extends BotEventHandler {
   name = 'messageCreate';
@@ -15,6 +18,20 @@ class InteractionCreateEventHandler extends BotEventHandler {
 
   async execute(_client: ExtendedClient, message: Message) {
     if (message.author.bot || !message.member) return null;
+
+    if (BadWordCache.check(message.content)) {
+      await message.delete();
+      return message.channel.send({ content: `${Formatters.userMention(message.author.id)} ${Config.BADWORD_MSG}` });
+    }
+
+    if (message.member.joinedTimestamp
+        && (Date.now() - message.member.joinedTimestamp) < 48 * 60 * 60 * 1000) {
+      const count = AntiRaid.add(message.content);
+      if (count >= 1 && message.channel.isText()) {
+        message.channel.setRateLimitPerUser(Config.ANTIRAID_RATELIMIT, 'Anti-Raid');
+      }
+    }
+
     MemberCache.initialiseIfNotExists(message.author.id);
 
     if (ActivityChannelCache.checkChannel(message.channel.id)) {

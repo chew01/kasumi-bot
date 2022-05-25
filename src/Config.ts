@@ -89,10 +89,16 @@ namespace Config {
   export const SLOTS_MULTIPLIER: number[] = Games.gambling.slots.multiplier;
 
   export const ERROR_MSG: string = Settings.messages.error;
+  export const BADWORD_MSG: string = Settings.messages.badword;
+
   export const TRADE_EXPIRY: number = Settings.trade.expiry;
   export const ACTIVITY_DESCRIPTION: string = Settings.activity.description;
   export const ACTIVITY_TYPE: ActivityType.Listening | ActivityType.Competing |
   ActivityType.Playing | ActivityType.Watching | ActivityType.Streaming = Settings.activity.type;
+
+  export const ANTIRAID_LOGEXPIRY: number = Settings.antiraid.logExpiry;
+  export const ANTIRAID_QUOTA: number = Settings.antiraid.quota;
+  export const ANTIRAID_RATELIMIT: number = Settings.antiraid.rateLimit;
 
   export const LEVEL_ROLES: string[] = Roles.levels;
 
