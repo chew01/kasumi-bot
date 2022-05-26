@@ -10,7 +10,8 @@ class VoiceStateUpdateEventHandler extends BotEventHandler {
   once = false;
 
   async execute(_client: ExtendedClient, _oldState: VoiceState, newState: VoiceState) {
-    if (newState.channelId && newState.member) {
+    if (newState.channelId && newState.member
+        && newState.channelId !== newState.guild.afkChannelId) {
       MemberCache.initialiseIfNotExists(newState.id);
       VoiceParticipationCache.join(newState.id, newState.member);
     } else {
