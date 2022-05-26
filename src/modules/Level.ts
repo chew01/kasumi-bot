@@ -46,8 +46,6 @@ export default class Level {
 
         if (message) {
           await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
-        } else {
-          await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
         }
         return;
       }
@@ -64,8 +62,6 @@ export default class Level {
           Inventory.give(member.id, 'Chat Loot Box', 1);
           if (message) {
             await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
-          } else {
-            await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
           }
           return;
         }
@@ -75,8 +71,6 @@ export default class Level {
       Inventory.give(member.id, 'Chat Loot Box', 1);
       if (message) {
         await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
-      } else {
-        await member.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
       }
     }
   }
