@@ -2,7 +2,7 @@ import type { ApplicationCommandOptionData, CommandInteraction } from 'discord.j
 import SlashCommand from '../../../types/SlashCommand';
 import { activityChannelList, activityCommandListSC } from './list/activityChannelList';
 import { activityChannelAdd, activityCommandAddSC } from './add/activityChannelAdd';
-import { activityChannelRemove, activityCommandRemoveSC } from './remove/activityChannelRemove';
+import { activityChannelDel, activityCommandDelSC } from './del/activityChannelDel';
 import Config from '../../../Config';
 
 class ActivityChannelCommand extends SlashCommand {
@@ -13,7 +13,7 @@ class ActivityChannelCommand extends SlashCommand {
   public options: ApplicationCommandOptionData[] = [
     activityCommandListSC,
     activityCommandAddSC,
-    activityCommandRemoveSC,
+    activityCommandDelSC,
   ];
 
   async run(interaction: CommandInteraction) {
@@ -22,7 +22,7 @@ class ActivityChannelCommand extends SlashCommand {
 
     if (subcommand === 'list') return activityChannelList(interaction);
     if (subcommand === 'add') return activityChannelAdd(interaction);
-    if (subcommand === 'remove') return activityChannelRemove(interaction);
+    if (subcommand === 'remove') return activityChannelDel(interaction);
 
     return null;
   }

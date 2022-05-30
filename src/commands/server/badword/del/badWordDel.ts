@@ -1,11 +1,7 @@
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandSubCommandData,
-  ChatInputCommandInteraction,
-} from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import BadWordCache from '../../../../cache/BadWordCache';
 
-export const badWordRemoveSC: ApplicationCommandSubCommandData = {
+export const badWordDelSC: ApplicationCommandSubCommandData = {
   name: 'remove',
   description: 'Remove a badword to the list',
   type: ApplicationCommandOptionType.Subcommand,
@@ -19,7 +15,7 @@ export const badWordRemoveSC: ApplicationCommandSubCommandData = {
   ],
 };
 
-export function badWordRemove(interaction: ChatInputCommandInteraction) {
+export function badWordDel(interaction: ChatInputCommandInteraction) {
   const word = interaction.options.getString('word');
   if (!word) return interaction.reply({ content: 'You did not choose a valid word. Try again!' });
 

@@ -7,7 +7,7 @@ import {
 } from 'discord.js';
 import ActivityChannelCache from '../../../../cache/ActivityChannelCache';
 
-export const activityCommandRemoveSC: ApplicationCommandSubCommandData = {
+export const activityCommandDelSC: ApplicationCommandSubCommandData = {
   name: 'remove',
   description: 'Remove a channel from activity tracking',
   type: ApplicationCommandOptionType.Subcommand,
@@ -21,7 +21,7 @@ export const activityCommandRemoveSC: ApplicationCommandSubCommandData = {
   ],
 };
 
-export function activityChannelRemove(interaction: ChatInputCommandInteraction) {
+export function activityChannelDel(interaction: ChatInputCommandInteraction) {
   const channel = interaction.options.getChannel('channel');
   if (!channel || channel.type !== ChannelType.GuildText) return interaction.reply({ content: 'You did not choose a valid channel. Try again!' });
 

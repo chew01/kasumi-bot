@@ -3,7 +3,7 @@ import SlashCommand from '../../../types/SlashCommand';
 import Config from '../../../Config';
 import { badWordAdd, badWordAddSC } from './add/badWordAdd';
 import { badWordList, badWordListSC } from './list/badWordList';
-import { badWordRemove, badWordRemoveSC } from './remove/badWordRemove';
+import { badWordDel, badWordDelSC } from './del/badWordDel';
 
 class BadWordCommand extends SlashCommand {
   public name: string = 'badword';
@@ -13,7 +13,7 @@ class BadWordCommand extends SlashCommand {
   public options: ApplicationCommandOptionData[] = [
     badWordAddSC,
     badWordListSC,
-    badWordRemoveSC,
+    badWordDelSC,
   ];
 
   async run(interaction: CommandInteraction) {
@@ -22,7 +22,7 @@ class BadWordCommand extends SlashCommand {
 
     if (subcommand === 'list') return badWordList(interaction);
     if (subcommand === 'add') return badWordAdd(interaction);
-    if (subcommand === 'remove') return badWordRemove(interaction);
+    if (subcommand === 'remove') return badWordDel(interaction);
 
     return null;
   }
