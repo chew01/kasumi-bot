@@ -1,6 +1,6 @@
 import Database from '../Database';
 
-export default class Variables {
+export default class Variable {
   public static registerTicketCategory(category_id: string): void {
     Database.execute(
       `INSERT INTO variable (key, value) 
@@ -15,6 +15,13 @@ export default class Variables {
     return res ? res.value : undefined;
   }
 
+  public static clearTicketCategory(): boolean {
+    const exists = this.getTicketCategory();
+    if (!exists) return false;
+    Database.execute('DELETE FROM variable WHERE key = @key', { key: 'ticket_category' });
+    return true;
+  }
+
   public static registerTicketModRole(role_id: string): void {
     Database.execute(
       `INSERT INTO variable (key, value) 
@@ -27,5 +34,12 @@ export default class Variables {
   public static getTicketModRole(): string | undefined {
     const res = Database.fetchOne('SELECT value FROM variable WHERE key = @key', { key: 'ticket_mod_role' });
     return res ? res.value : undefined;
+  }
+
+  public static clearTicketModRole(): boolean {
+    const exists = this.getTicketModRole();
+    if (!exists) return false;
+    Database.execute('DELETE FROM variable WHERE key = @key', { key: 'ticket_mod_role' });
+    return true;
   }
 }
