@@ -56,6 +56,12 @@ const initializeDB = [
     word TEXT PRIMARY KEY,
     user_id TEXT NOT NULL
     );`,
+
+  `CREATE TABLE IF NOT EXISTS reaction (
+    id PRIMARY KEY,
+    type TEXT NOT NULL,
+    url TEXT NOT NULL
+    );`,
 ];
 
 export default initializeDB;
