@@ -1,14 +1,9 @@
 import type { ButtonInteraction, ModalSubmitInteraction } from 'discord.js';
 import {
-  ActionRowBuilder,
-  ChannelType,
-  Formatters,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
+  ActionRowBuilder, ChannelType, Formatters, ModalBuilder, TextInputBuilder, TextInputStyle,
 } from 'discord.js';
 import randomstring from 'randomstring';
-import Variables from '../storage/models/Variables';
+import Variable from '../storage/models/Variable';
 import Config from '../Config';
 
 export default class Ticket {
@@ -40,18 +35,18 @@ export default class Ticket {
       return interaction.reply({ content: 'I don\'t have permission to create a new channel/role! Contact a moderator.', ephemeral: true });
     }
 
-    let role = Variables.getTicketModRole();
+    let role = Variable.getTicketModRole();
     if (!role) {
       const createdRole = await interaction.guild.roles.create({ name: 'Ticket Mod' });
-      Variables.registerTicketModRole(createdRole.id);
+      Variable.registerTicketModRole(createdRole.id);
       role = createdRole.id;
     }
     if (!role) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
 
-    let category = Variables.getTicketCategory();
+    let category = Variable.getTicketCategory();
     if (!category) {
       const createdCategory = await interaction.guild.channels.create('tickets', { type: ChannelType.GuildCategory });
-      Variables.registerTicketCategory(createdCategory.id);
+      Variable.registerTicketCategory(createdCategory.id);
       category = createdCategory.id;
     }
     if (!category) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
