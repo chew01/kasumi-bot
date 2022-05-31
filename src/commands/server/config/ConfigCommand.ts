@@ -4,6 +4,7 @@ import Config from '../../../Config';
 import { configList, configListSC } from './list/configList';
 import { configTicketCategory, configTicketCategorySC } from './ticketCategory/configTicketCategory';
 import { configTicketModRole, configTicketModRoleSC } from './ticketModRole/configTicketModRole';
+import { configStarboard, configStarboardSC } from './starboard/configStarboard';
 
 class ConfigCommand extends SlashCommand {
   public name: string = 'config';
@@ -13,7 +14,9 @@ class ConfigCommand extends SlashCommand {
   public options: ApplicationCommandOptionData[] = [
     configListSC,
     configTicketCategorySC,
-    configTicketModRoleSC];
+    configTicketModRoleSC,
+    configStarboardSC,
+  ];
 
   async run(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return interaction.reply({ content: Config.ERROR_MSG });
@@ -22,6 +25,7 @@ class ConfigCommand extends SlashCommand {
     if (subcommand === 'list') return configList(interaction);
     if (subcommand === 'set_ticket_category') return configTicketCategory(interaction);
     if (subcommand === 'set_ticketmod_role') return configTicketModRole(interaction);
+    if (subcommand === 'set_starboard') return configStarboard(interaction);
 
     return null;
   }

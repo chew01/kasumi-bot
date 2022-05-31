@@ -7,6 +7,7 @@
     "DirectMessages",
     "Guilds",
     "GuildMessages",
+    "GuildMessageReactions",
     "GuildVoiceStates",
     "GuildMembers",
     "MessageContent"
@@ -30,5 +31,10 @@
   "ticket": {
     "category": "",
     "role": ""
+  },
+  "starboard": {
+    "quota": 2,
+    "emoji": "<:number_0:958732303805349968>",
+    "channel": "981165234448367666"
   }
 }
