@@ -27,7 +27,7 @@ class InteractionCreateEventHandler extends BotEventHandler {
     if (message.member.joinedTimestamp
         && (Date.now() - message.member.joinedTimestamp) < 48 * 60 * 60 * 1000) {
       const count = AntiRaid.add(message.content);
-      if (count >= 1 && message.channel.isText()) {
+      if (count >= Config.ANTIRAID_QUOTA && message.channel.isText()) {
         message.channel.setRateLimitPerUser(Config.ANTIRAID_RATELIMIT, 'Anti-Raid');
       }
     }
