@@ -10,7 +10,7 @@ export default class Star {
     Database.execute('INSERT INTO star (starred_id, board_id) VALUES (@starred_id, @board_id)', { starred_id, board_id });
   }
 
-  public static remove(starred_id: string): void {
-    Database.execute('DELETE FROM star WHERE starred_id = @starred_id', { starred_id });
+  public static remove(board_id: string): void {
+    Database.execute('DELETE FROM star WHERE board_id = @board_id', { board_id });
   }
 }

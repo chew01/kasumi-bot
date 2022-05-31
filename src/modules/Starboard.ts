@@ -123,6 +123,7 @@ export default class Starboard {
       await starboardPost.edit({ content: desc });
     } else {
       await starboardPost.delete();
+      Star.remove(boardId);
     }
   }
 }
