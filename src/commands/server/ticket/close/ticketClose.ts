@@ -5,7 +5,6 @@ import {
   ChatInputCommandInteraction,
 } from 'discord.js';
 import Config from '../../../../Config';
-import Variable from '../../../../storage/models/Variable';
 
 export const ticketCloseSC: ApplicationCommandSubCommandData = {
   name: 'close',
@@ -20,10 +19,10 @@ export async function ticketClose(interaction: ChatInputCommandInteraction) {
   const channelName = interaction.channel.name;
   const channelParent = interaction.channel.parent;
 
-  let category = Variable.getTicketCategory();
+  let category = Config.getTicketCategory();
   if (!category) {
     const createdCategory = await interaction.guild.channels.create('tickets', { type: ChannelType.GuildCategory });
-    Variable.registerTicketCategory(createdCategory.id);
+    await Config.setTicketCategory(createdCategory.id);
     category = createdCategory.id;
   }
   if (!category) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });

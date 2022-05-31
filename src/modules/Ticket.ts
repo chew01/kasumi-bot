@@ -3,7 +3,6 @@ import {
   ActionRowBuilder, ChannelType, Formatters, ModalBuilder, TextInputBuilder, TextInputStyle,
 } from 'discord.js';
 import randomstring from 'randomstring';
-import Variable from '../storage/models/Variable';
 import Config from '../Config';
 
 export default class Ticket {
@@ -35,18 +34,18 @@ export default class Ticket {
       return interaction.reply({ content: 'I don\'t have permission to create a new channel/role! Contact a moderator.', ephemeral: true });
     }
 
-    let role = Variable.getTicketModRole();
+    let role = Config.getTicketModRole();
     if (!role) {
       const createdRole = await interaction.guild.roles.create({ name: 'Ticket Mod' });
-      Variable.registerTicketModRole(createdRole.id);
+      await Config.setTicketModRole(createdRole.id);
       role = createdRole.id;
     }
     if (!role) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
 
-    let category = Variable.getTicketCategory();
+    let category = Config.getTicketCategory();
     if (!category) {
       const createdCategory = await interaction.guild.channels.create('tickets', { type: ChannelType.GuildCategory });
-      Variable.registerTicketCategory(createdCategory.id);
+      await Config.setTicketCategory(createdCategory.id);
       category = createdCategory.id;
     }
     if (!category) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });

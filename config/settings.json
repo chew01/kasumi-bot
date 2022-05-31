@@ -11,6 +11,10 @@
     "GuildMembers",
     "MessageContent"
   ],
+  "partials": [
+    3,
+    4
+  ],
   "messages": {
     "error": "Oops, we ran into an error. Try again!",
     "badword": "No bad words allowed!"
@@ -22,5 +26,9 @@
   },
   "trade": {
     "expiry": 600000
+  },
+  "ticket": {
+    "category": "",
+    "role": ""
   }
 }

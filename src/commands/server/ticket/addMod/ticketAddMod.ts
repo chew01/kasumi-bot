@@ -1,6 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import Config from '../../../../Config';
-import Variable from '../../../../storage/models/Variable';
 
 export const ticketAddModSC: ApplicationCommandSubCommandData = {
   name: 'add_mod',
@@ -22,10 +21,10 @@ export async function ticketAddMod(interaction: ChatInputCommandInteraction) {
   const user = interaction.options.getMember('user');
   if (!user) return interaction.reply({ content: 'You did not choose a valid user. Try again!' });
 
-  let role = Variable.getTicketModRole();
+  let role = Config.getTicketModRole();
   if (!role) {
     const createdRole = await interaction.guild.roles.create({ name: 'Ticket Mod' });
-    Variable.registerTicketModRole(createdRole.id);
+    await Config.setTicketModRole(createdRole.id);
     role = createdRole.id;
   }
   if (!role) return interaction.reply({ content: Config.ERROR_MSG });

@@ -47,11 +47,6 @@ const initializeDB = [
     channel_id TEXT PRIMARY KEY
     );`,
 
-  `CREATE TABLE IF NOT EXISTS variable (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
-    );`,
-
   `CREATE TABLE IF NOT EXISTS bad_word (
     word TEXT PRIMARY KEY,
     user_id TEXT NOT NULL

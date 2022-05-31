@@ -1,5 +1,7 @@
 import 'dotenv/config';
-import type { ActivityType, GatewayIntentsString } from 'discord.js';
+import type { ActivityType, GatewayIntentsString, Partials } from 'discord.js';
+import fs from 'fs';
+import Logger from './services/Logger';
 
 const Income = require('../config/income.json');
 const Games = require('../config/games.json');
@@ -26,6 +28,28 @@ class Config {
     };
   }
 
+  public static async setTicketCategory(category_id: string): Promise<void> {
+    Settings.ticket.category = category_id;
+    await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
+      if (err) { Logger.error(err.message); }
+    });
+  }
+
+  public static getTicketCategory(): string {
+    return Settings.ticket.category;
+  }
+
+  public static async setTicketModRole(role_id: string): Promise<void> {
+    Settings.ticket.role = role_id;
+    await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
+      if (err) Logger.error(err.message);
+    });
+  }
+
+  public static getTicketModRole(): string {
+    return Settings.ticket.role;
+  }
+
   static DISCORD_TOKEN: string = Config.populateConfig().DISCORD_TOKEN;
 
   static GUILD_ID: string | undefined = Config.populateConfig().GUILD_ID;
@@ -39,6 +63,7 @@ class Config {
 
 namespace Config {
   export const GATEWAY_INTENTS: GatewayIntentsString[] = Settings.intents;
+  export const GATEWAY_PARTIALS: Partials[] = Settings.partials;
 
   export const BASE_DAILY_INCOME: number = Income.jobs.daily.baseDailyIncome;
   export const STREAK_REWARD_NAME: string = Income.jobs.daily.streakRewardName;
@@ -99,7 +124,6 @@ namespace Config {
   export const ANTIRAID_LOGEXPIRY: number = Settings.antiraid.logExpiry;
   export const ANTIRAID_QUOTA: number = Settings.antiraid.quota;
   export const ANTIRAID_RATELIMIT: number = Settings.antiraid.rateLimit;
-
   export const LEVEL_ROLES: string[] = Roles.levels;
 
 }
