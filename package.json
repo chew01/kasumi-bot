@@ -31,6 +31,7 @@
     "discord-api-types": "^0.32.1",
     "discord.js": "^14.0.0-dev.1651493371-4ba0f56",
     "dotenv": "^16.0.0",
+    "emoji-regex": "^10.1.0",
     "lodash": "^4.17.21",
     "pino": "^7.11.0",
     "pino-pretty": "^7.6.1",
