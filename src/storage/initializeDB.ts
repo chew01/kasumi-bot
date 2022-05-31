@@ -55,7 +55,12 @@ const initializeDB = [
   `CREATE TABLE IF NOT EXISTS reaction (
     id PRIMARY KEY,
     type TEXT NOT NULL,
-    url TEXT NOT NULL
+    url TEXT NOT NULL 
+    );`,
+
+  `CREATE TABLE IF NOT EXISTS star (
+    starred_id PRIMARY KEY,
+    board_id TEXT UNIQUE NOT NULL
     );`,
 ];
 
