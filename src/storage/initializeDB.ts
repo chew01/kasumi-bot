@@ -43,6 +43,14 @@ const initializeDB = [
     CHECK ( price >= 0 )
     );`,
 
+  `CREATE TABLE IF NOT EXISTS box (
+    box_name TEXT PRIMARY KEY, 
+    key_name TEXT UNIQUE NOT NULL,
+    rewards TEXT,
+    FOREIGN KEY (box_name) REFERENCES item_type (item_name) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (key_name) REFERENCES item_type (item_name) ON DELETE CASCADE ON UPDATE CASCADE
+    );`,
+
   `CREATE TABLE IF NOT EXISTS activity_channel (
     channel_id TEXT PRIMARY KEY
     );`,
