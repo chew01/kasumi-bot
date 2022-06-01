@@ -19,11 +19,13 @@ class InteractionCreateEventHandler extends BotEventHandler {
   async execute(_client: ExtendedClient, message: Message) {
     if (message.author.bot || !message.member) return null;
 
+    // Bad word checks
     if (BadWordCache.check(message.content)) {
       await message.delete();
       return message.channel.send({ content: `${Formatters.userMention(message.author.id)} ${Config.BADWORD_MSG}` });
     }
 
+    // Antiraid checks
     if (message.member.joinedTimestamp
         && (Date.now() - message.member.joinedTimestamp) < 48 * 60 * 60 * 1000) {
       const count = AntiRaid.add(message.content);
@@ -32,8 +34,10 @@ class InteractionCreateEventHandler extends BotEventHandler {
       }
     }
 
+    // Initialize member
     MemberCache.initialiseIfNotExists(message.author.id);
 
+    // Activity channel reward checks
     if (ActivityChannelCache.checkChannel(message.channel.id)) {
       const onCooldown = ActivityChannelCache.checkUser(message.author.id);
       if (!onCooldown) {
