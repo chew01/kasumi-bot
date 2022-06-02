@@ -1,12 +1,8 @@
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandSubCommandData,
-  ChatInputCommandInteraction,
-  Formatters,
-} from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import Shop from '../../../../storage/models/Shop';
 import CurrencyUtils from '../../../../utils/CurrencyUtils';
 import Config from '../../../../Config';
+import Item from '../../../../storage/models/Item';
 
 export const shopAddRoleSC: ApplicationCommandSubCommandData = {
   name: 'add_role_listing',
@@ -41,8 +37,10 @@ export async function shopAddRole(interaction: ChatInputCommandInteraction) {
   if (interaction.guild.members.me.roles.highest.comparePositionTo(role.id) <= 0) return interaction.reply({ content: 'That role is above the bot!' });
   if (role === interaction.guild.roles.premiumSubscriberRole) return interaction.reply({ content: 'You can\'t give the Nitro Booster role!' });
 
-  if (Shop.has(role.name)) return interaction.reply({ content: 'The role you chose is already in the shop.' });
+  if (Shop.hasRole(role.id)) return interaction.reply({ content: 'The role you chose is already in the shop.' });
+  if (!Item.getByRoleId(role.id)) return interaction.reply({ content: 'That role has not been added to the database.' });
 
-  Shop.addRole(role.name, role.id, price);
-  return interaction.reply({ content: `Successfully listed ${Formatters.roleMention(role.id)} for ${CurrencyUtils.format(price)}.` });
+  Shop.addRole(role.name, price);
+
+  return interaction.reply({ content: `Successfully listed **${role.name}** for ${CurrencyUtils.format(price)}.` });
 }

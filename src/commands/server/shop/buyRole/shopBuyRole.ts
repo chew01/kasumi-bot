@@ -1,11 +1,6 @@
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandSubCommandData,
-  ChatInputCommandInteraction,
-} from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import Shop from '../../../../storage/models/Shop';
 import CurrencyUtils from '../../../../utils/CurrencyUtils';
-import Inventory from '../../../../storage/models/Inventory';
 import Member from '../../../../storage/models/Member';
 import Config from '../../../../Config';
 
@@ -33,8 +28,8 @@ export async function shopBuyRole(interaction: ChatInputCommandInteraction) {
   if (interaction.guild.members.me.roles.highest.comparePositionTo(role.id) <= 0) return interaction.reply({ content: 'That role is above the bot! Contact a moderator.' });
   if (role === interaction.guild.roles.premiumSubscriberRole) return interaction.reply({ content: 'You can\'t buy the Nitro Booster role!' });
 
-  if (!Shop.has(role.name)) return interaction.reply({ content: 'The role you chose is not in the shop.' });
-  if (Inventory.has(interaction.user.id, role.name)) return interaction.reply({ content: 'You already own this role!' });
+  if (!Shop.hasRole(role.id)) return interaction.reply({ content: 'The role you chose is not in the shop.' });
+  if (interaction.member.roles.cache.has(role.id)) return interaction.reply({ content: 'You already own this role!' });
 
   const buy = Shop.buyRole(interaction.user.id, role.name);
   const bal = Member.getBalance(interaction.user.id);

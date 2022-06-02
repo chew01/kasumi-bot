@@ -1,9 +1,4 @@
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandSubCommandData,
-  ChatInputCommandInteraction,
-  Formatters,
-} from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import Shop from '../../../../storage/models/Shop';
 
 export const shopDelRoleSC: ApplicationCommandSubCommandData = {
@@ -24,8 +19,8 @@ export async function shopDelRole(interaction: ChatInputCommandInteraction) {
   const role = interaction.options.getRole('role');
   if (!role) return interaction.reply({ content: 'You did not choose a valid role. Try again!' });
 
-  if (!Shop.has(role.name)) return interaction.reply({ content: 'The role you chose is not in the shop.' });
+  if (!Shop.hasRole(role.id)) return interaction.reply({ content: 'The role you chose is not in the shop.' });
 
-  Shop.removeRole(role.id);
-  return interaction.reply({ content: `Successfully delisted ${Formatters.roleMention(role.id)}.` });
+  Shop.removeRole(role.name);
+  return interaction.reply({ content: `Successfully delisted **${role.name}**.` });
 }
