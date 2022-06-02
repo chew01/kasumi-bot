@@ -16,18 +16,21 @@ export default class Shop {
     return !!Database.fetchOne('SELECT 1 FROM shop_listing WHERE item_name = @item_name', { item_name });
   }
 
+  public static hasRole(role_id: string): boolean {
+    return !!Database.fetchOne('SELECT 1 FROM shop_listing JOIN item_type it on shop_listing.item_name = it.item_name WHERE role_id = @role_id', { role_id });
+  }
+
   public static getPrice(item_name: string): number {
     const item = Database.fetchOne('SELECT price FROM shop_listing WHERE item_name = @item_name', { item_name });
     return item ? item.price : -1;
   }
 
-  public static addRole(role_name: string, role_id: string, price: number): void {
-    Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@role_name, @role_id)', { role_name, role_id });
+  public static addRole(role_name: string, price: number): void {
     Database.execute('INSERT INTO shop_listing (item_name, price) VALUES (@role_name, @price)', { role_name, price });
   }
 
-  public static removeRole(role_id: string): void {
-    Database.execute('DELETE FROM item_type WHERE role_id = @role_id', { role_id });
+  public static removeRole(role_name: string): void {
+    Database.execute('DELETE FROM shop_listing WHERE item_name = @role_name', { role_name });
   }
 
   public static addItem(item_name: string, price: number): void {

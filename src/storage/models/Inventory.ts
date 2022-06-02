@@ -28,6 +28,17 @@ export default class Inventory {
     );
   }
 
+  public static take(user_id: string, item_name: string, quantity: number): void {
+    const owned = this.getQuantityOwned(user_id, item_name);
+    if (owned === quantity) {
+      Database.execute('DELETE FROM member_inventory WHERE user_id = @user_id AND item_name = @item_name', { user_id, item_name });
+      return;
+    }
+    if (owned > quantity) {
+      Database.execute('UPDATE member_inventory SET quantity = quantity - @quantity WHERE user_id = @user_id AND item_name = @item_name', { user_id, item_name, quantity });
+    }
+  }
+
   public static getQuantityOwned(user_id:string, item_name: string): number {
     const res = Database.fetchOne('SELECT quantity FROM member_inventory WHERE user_id = @user_id AND item_name = @item_name', { user_id, item_name });
     return res.quantity || 0;
