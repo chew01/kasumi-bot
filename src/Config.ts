@@ -50,6 +50,17 @@ class Config {
     return Settings.ticket.role;
   }
 
+  public static async setAutoRoles(arr: string[]) {
+    Settings.autoroles = arr;
+    await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
+      if (err) Logger.error(err.message);
+    });
+  }
+
+  public static getAutoRoles(): string[] {
+    return Settings.autoroles;
+  }
+
   static DISCORD_TOKEN: string = Config.populateConfig().DISCORD_TOKEN;
 
   static GUILD_ID: string | undefined = Config.populateConfig().GUILD_ID;
