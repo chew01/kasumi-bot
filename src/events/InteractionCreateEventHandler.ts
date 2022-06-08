@@ -29,9 +29,6 @@ class InteractionCreateEventHandler extends BotEventHandler {
         Logger.logCommand(interaction, 'Failure', interaction.commandName);
         if (!interaction.deferred) await interaction.reply({ content: 'Uh oh! We were unable to execute your command.', ephemeral: true });
         else await interaction.followUp({ content: 'Uh oh! We were unable to execute your command.', ephemeral: true });
-        if (err instanceof Error) {
-          return Logger.error(err.stack || err.message);
-        }
       }
     }
 
