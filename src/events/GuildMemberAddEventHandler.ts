@@ -4,6 +4,7 @@ import type ExtendedClient from '../ExtendedClient';
 import MemberCache from '../cache/MemberCache';
 import Member from '../storage/models/Member';
 import Level from '../modules/Level';
+import AutoRole from '../modules/AutoRole';
 
 class GuildMemberAddEventHandler extends BotEventHandler {
   name = 'guildMemberAdd';
@@ -11,6 +12,7 @@ class GuildMemberAddEventHandler extends BotEventHandler {
   once = false;
 
   async execute(_client: ExtendedClient, member: GuildMember) {
+    await AutoRole.assign(member);
     MemberCache.initialiseIfNotExists(member.id);
     const level = Member.getExperience(member.id);
     return Level.check(level, member);
