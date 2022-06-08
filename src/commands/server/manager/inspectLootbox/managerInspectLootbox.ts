@@ -3,10 +3,12 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  Formatters,
 } from 'discord.js';
 import Box from '../../../../storage/models/Box';
 import Lootbox from '../../../../modules/Lootbox';
 import Config from '../../../../Config';
+import Item from '../../../../storage/models/Item';
 
 export const managerInspectLootboxSC: ApplicationCommandSubCommandData = {
   name: 'inspect_lootbox',
@@ -49,7 +51,13 @@ export function managerInspectLootbox(interaction: ChatInputCommandInteraction) 
   let quantityString = '';
   output.forEach((reward, index) => {
     indexString += `${index + 1}\n`;
-    itemString += `${reward.item} - ${reward.odds}%\n`;
+    const item = Item.getOne(reward.item);
+    if (!item) return;
+    if (item.role_id) {
+      itemString += `${Formatters.roleMention(item.role_id)} - ${reward.odds}%\n`;
+    } else {
+      itemString += `${reward.item} - ${reward.odds}%\n`;
+    }
     quantityString += `${reward.quantity}\n`;
   });
 
