@@ -18,6 +18,7 @@ export function configList(interaction: ChatInputCommandInteraction) {
   const ticketCategory = Config.getTicketCategory();
   const ticketModRole = Config.getTicketModRole();
   const { quota, emoji, channel } = Starboard.getSettings();
+  const autoroles = Config.getAutoRoles().map((roleId) => Formatters.roleMention(roleId)).join('\n');
 
   const embed = new EmbedBuilder()
     .setTitle('⚙ Server Configuration ⚙')
@@ -27,6 +28,7 @@ export function configList(interaction: ChatInputCommandInteraction) {
       { name: 'Starboard Quota', value: `${quota}` },
       { name: 'Starboard Emoji', value: emoji ? `${emoji}` : 'Not set' },
       { name: 'Starboard Channel', value: channel ? `${Formatters.channelMention(channel)}` : 'Not set' },
+      { name: 'Auto-Assign Roles', value: autoroles || 'Not set' },
     ]);
 
   return interaction.reply({ embeds: [embed] });

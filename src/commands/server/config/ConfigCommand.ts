@@ -5,6 +5,8 @@ import { configList, configListSC } from './list/configList';
 import { configTicketCategory, configTicketCategorySC } from './ticketCategory/configTicketCategory';
 import { configTicketModRole, configTicketModRoleSC } from './ticketModRole/configTicketModRole';
 import { configStarboard, configStarboardSC } from './starboard/configStarboard';
+import { configAddAutoRole, configAddAutoRoleSC } from './addAutoRole/configAddAutoRole';
+import { configDelAutoRole, configDelAutoRoleSC } from './delAutoRole/configDelAutoRole';
 
 class ConfigCommand extends SlashCommand {
   public name: string = 'config';
@@ -16,6 +18,8 @@ class ConfigCommand extends SlashCommand {
     configTicketCategorySC,
     configTicketModRoleSC,
     configStarboardSC,
+    configAddAutoRoleSC,
+    configDelAutoRoleSC,
   ];
 
   async run(interaction: CommandInteraction) {
@@ -26,6 +30,8 @@ class ConfigCommand extends SlashCommand {
     if (subcommand === 'set_ticket_category') return configTicketCategory(interaction);
     if (subcommand === 'set_ticketmod_role') return configTicketModRole(interaction);
     if (subcommand === 'set_starboard') return configStarboard(interaction);
+    if (subcommand === 'add_autorole') return configAddAutoRole(interaction);
+    if (subcommand === 'del_autorole') return configDelAutoRole(interaction);
 
     return null;
   }
