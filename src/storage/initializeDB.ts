@@ -72,7 +72,15 @@ const initializeDB = [
 
   `CREATE TABLE IF NOT EXISTS star (
     starred_id PRIMARY KEY,
-    board_id TEXT UNIQUE NOT NULL
+    board_id TEXT UNIQUE NOT NULL 
+    );`,
+
+  `CREATE TABLE IF NOT EXISTS giveaway (
+    message_id PRIMARY KEY,
+    channel_id TEXT NOT NULL,
+    draw INTEGER NOT NULL,
+    prize TEXT NOT NULL,
+    host TEXT NOT NULL
     );`,
 ];
 
