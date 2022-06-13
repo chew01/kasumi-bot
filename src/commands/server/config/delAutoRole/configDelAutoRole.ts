@@ -24,8 +24,8 @@ export async function configDelAutoRole(interaction: ChatInputCommandInteraction
   if (!autoroles.includes(role.id)) return interaction.reply({ content: 'That role is not in the auto-assign list!' });
 
   const index = autoroles.indexOf(role.id);
-  const newList = autoroles.splice(index, 1);
-  await Config.setAutoRoles(newList);
+  autoroles.splice(index, 1);
+  await Config.setAutoRoles(autoroles);
 
   return interaction.reply({ content: `Successfully removed the ${role.name} role from the auto-assign list.` });
 }
