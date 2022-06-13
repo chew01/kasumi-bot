@@ -8,7 +8,8 @@ class BadWordCache {
 
   public constructor() {
     this.list = BadWord.getAll();
-    this.filter = new Filter({ list: this.list.map((bw) => bw.word) });
+    this.filter = new Filter({ emptyList: true });
+    this.filter.addWords(...this.list.map((bw) => bw.word));
   }
 
   public check(str: string): boolean {
