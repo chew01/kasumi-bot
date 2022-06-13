@@ -38,6 +38,7 @@ export function managerSetLootboxCoins(interaction: ChatInputCommandInteraction)
   if (min === null) return interaction.reply({ content: 'You did not choose a valid minimum value. Try again!' });
   const max = interaction.options.getInteger('max');
   if (max === null) return interaction.reply({ content: 'You did not choose a valid maximum value. Try again!' });
+  if (min > max) return interaction.reply({ content: 'Minimum cannot be more than maximum! Try again.' });
 
   const existingBox = Box.getOne(box);
   if (!existingBox) return interaction.reply({ content: 'That loot box does not exist!' });
