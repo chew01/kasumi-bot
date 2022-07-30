@@ -14,7 +14,7 @@ export default class ExtendedClient extends Client {
   readonly commands: CommandHandler;
 
   public constructor() {
-    super({ intents: Config.GATEWAY_INTENTS });
+    super({ intents: Config.GATEWAY_INTENTS, partials: Config.GATEWAY_PARTIALS });
     this.events = [];
     this.commands = new CommandHandler();
   }
@@ -48,10 +48,11 @@ export default class ExtendedClient extends Client {
     await this.loadEvents();
 
     await this.commands.load();
-    //  await this.commands.update();
+    await this.commands.update();
 
     await this.login(Config.DISCORD_TOKEN);
   }
 }
 
-new ExtendedClient().initialise();
+export const client = new ExtendedClient();
+client.initialise();
