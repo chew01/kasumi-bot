@@ -35,7 +35,6 @@ class BlackjackCommand extends SlashCommand {
 
     let bal = Member.getBalance(interaction.user.id);
     if (bal < bet) return interaction.reply(`You do not have enough ${Config.CURRENCY_NAME_PLURAL} to make the bet! You have ${CurrencyUtils.formatEmoji(bal)}`);
-
     bal = Member.deductMoney(interaction.user.id, bet);
 
     // Start a new game
@@ -67,8 +66,9 @@ class BlackjackCommand extends SlashCommand {
       start.dealerCards.forEach((card) => {
         dealerHand += `<${cards[`${card.suit},${card.rank}`]}>`;
       });
-      bal = Member.addMoney(interaction.user.id, currentBet * Config.BLACKJACK_MULTIPLIER);
-      description = `You bet ${CurrencyUtils.format(currentBet)} and earned ${CurrencyUtils.format(currentBet * Config.BLACKJACK_MULTIPLIER)}\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
+
+      bal = Member.addMoney(interaction.user.id, Math.floor(currentBet * Config.BLACKJACK_NATURAL));
+      description = `You bet ${CurrencyUtils.format(currentBet)} and earned ${CurrencyUtils.format(currentBet * Config.BLACKJACK_NATURAL)}\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
     }
     if (startingCheck === 'Draw') {
       ended = true;
@@ -76,6 +76,7 @@ class BlackjackCommand extends SlashCommand {
       start.dealerCards.forEach((card) => {
         dealerHand += `<${cards[`${card.suit},${card.rank}`]}>`;
       });
+
       bal = Member.addMoney(interaction.user.id, currentBet);
       description = `You bet ${CurrencyUtils.format(currentBet)} and drew!\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
     }
@@ -132,8 +133,14 @@ class BlackjackCommand extends SlashCommand {
         game.playerStand();
       }
       if (i.customId === 'double') {
+        const secondCheck = Member.getBalance(interaction.user.id);
+        if (secondCheck < bet) {
+          await i.reply({ content: "You don't have enough money!", ephemeral: true });
+          return;
+        }
         game.playerDouble();
         currentBet *= 2;
+        bal = Member.deductMoney(interaction.user.id, bet);
       }
       const data = game.getData();
 
