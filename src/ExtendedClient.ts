@@ -40,8 +40,8 @@ export default class ExtendedClient extends Client {
   }
 
   public async initialise() {
-    Logger.setDevMode();
-    // else Logger.setProdMode();
+    if (Config.DEVELOPMENT_MODE) Logger.setDevMode();
+    else Logger.setProdMode();
     Logger.info(chalk.yellow('INITIALIZING...'));
     Database.initialize();
 

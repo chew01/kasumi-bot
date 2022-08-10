@@ -12,7 +12,7 @@ class Config {
   private static populateConfig() {
     if (!process.env['DISCORD_TOKEN']) throw new Error('No bot token was provided!');
     const {
-      DISCORD_TOKEN, GUILD_ID, CURRENCY_NAME, CURRENCY_NAME_PLURAL,
+      DISCORD_TOKEN, GUILD_ID, CURRENCY_NAME, CURRENCY_NAME_PLURAL, DEVELOPMENT_MODE,
     } = process.env;
 
     const encryptedClientId = DISCORD_TOKEN.split('.')[0];
@@ -25,6 +25,7 @@ class Config {
       BOT_CLIENT_ID,
       CURRENCY_NAME,
       CURRENCY_NAME_PLURAL,
+      DEVELOPMENT_MODE,
     };
   }
 
@@ -70,6 +71,8 @@ class Config {
   static CURRENCY_NAME: string | undefined = Config.populateConfig().CURRENCY_NAME;
 
   static CURRENCY_NAME_PLURAL: string | undefined = Config.populateConfig().CURRENCY_NAME_PLURAL;
+
+  static DEVELOPMENT_MODE: boolean = Config.populateConfig().DEVELOPMENT_MODE === 'TRUE';
 }
 
 namespace Config {
