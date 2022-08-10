@@ -3,7 +3,8 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
+  time,
+  userMention,
 } from 'discord.js';
 import dayjs from 'dayjs';
 import GiveawayManager from '../../../../modules/GiveawayManager';
@@ -40,11 +41,16 @@ export async function giveawayStart(interaction: ChatInputCommandInteraction) {
   if (!prize) return interaction.reply({ content: 'You did not enter a valid prize!', ephemeral: true });
 
   const parsedTime = dayjs(drawTime, 'DDMMYY HHmm', true);
-  if (!parsedTime.isValid()) return interaction.reply({ content: 'Draw time is not in correct format!', ephemeral: true });
+  if (!parsedTime.isValid()) {
+    return interaction.reply({
+      content: 'Draw time is not in correct format!',
+      ephemeral: true,
+    });
+  }
 
   const embed = new EmbedBuilder()
     .setTitle('🎉 Giveaway 🎉')
-    .setDescription(`${Formatters.userMention(interaction.user.id)} is organizing a giveaway!\nThis giveaway will end ${Formatters.time(parsedTime.toDate(), 'R')}\nPrize: **${prize}**`)
+    .setDescription(`${userMention(interaction.user.id)} is organizing a giveaway!\nThis giveaway will end ${time(parsedTime.toDate(), 'R')}\nPrize: **${prize}**`)
     .addFields([
       { name: 'Required Roles', value: 'None' },
       { name: 'Bypass Roles', value: 'None' },
@@ -56,5 +62,8 @@ export async function giveawayStart(interaction: ChatInputCommandInteraction) {
   GiveawayManager.start(msg.id, msg.channel.id, parsedTime.toDate(), prize, interaction.user.id);
   await msg.edit({ embeds: [embed.setFooter({ text: `ID: ${msg.id}` })] });
   await msg.react('🎉');
-  return interaction.reply({ content: 'Started a new giveaway! Use /giveaway add_role to add role options!', ephemeral: true });
+  return interaction.reply({
+    content: 'Started a new giveaway! Use /giveaway add_role to add role options!',
+    ephemeral: true,
+  });
 }

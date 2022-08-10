@@ -1,10 +1,5 @@
 import {
-  ButtonBuilder,
-  ButtonStyle,
-  EmbedBuilder,
-  Formatters,
-  GuildMember,
-  Message,
+  ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, Message, userMention,
 } from 'discord.js';
 import { Carousel } from 'cordyceps';
 import type { LeaderboardType, LevelDataType } from '../storage/models/Member';
@@ -21,7 +16,7 @@ export default class Level {
     if (data.level === data.previousLevel) {
       // If member less than Level 5 and does not have Level 1 role
       if (data.level < 5 && Config.LEVEL_ROLES[0]
-          && !member.roles.cache.some((role) => role.id === Config.LEVEL_ROLES[0])) {
+                && !member.roles.cache.some((role) => role.id === Config.LEVEL_ROLES[0])) {
         await member.roles.add(Config.LEVEL_ROLES[0]);
         return;
       }
@@ -45,7 +40,7 @@ export default class Level {
         Inventory.give(member.id, 'Chat Loot Box', 1);
 
         if (message) {
-          await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+          await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
         }
         return;
       }
@@ -61,7 +56,7 @@ export default class Level {
           await member.roles.add(role);
           Inventory.give(member.id, 'Chat Loot Box', 1);
           if (message) {
-            await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+            await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
           }
           return;
         }
@@ -70,7 +65,7 @@ export default class Level {
       // If member leveled up but not at milestone
       Inventory.give(member.id, 'Chat Loot Box', 1);
       if (message) {
-        await message.channel.send({ content: `${Formatters.userMention(member.id)} is now **Level ${data.level}**!` });
+        await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**!` });
       }
     }
   }
@@ -82,7 +77,7 @@ export default class Level {
     let levels = '';
     pageData.forEach((row) => {
       ranks += `${row.exp_rank}\n`;
-      names += `${Formatters.userMention(row.user_id)}\n`;
+      names += `${userMention(row.user_id)}\n`;
       levels += `${row.level} (${row.currentExp}/${row.nextLevelExp})\n`;
     });
 
@@ -94,8 +89,12 @@ export default class Level {
         { name: 'Name', value: names || 'None', inline: true },
         { name: 'Level', value: levels || 'None', inline: true },
         { name: 'Your Rank', value: `${leaderboard.userRow.exp_rank}`, inline: true },
-        { name: 'You', value: Formatters.userMention(leaderboard.userRow.user_id), inline: true },
-        { name: 'Your Level', value: `${leaderboard.userRow.level} (${leaderboard.userRow.currentExp}/${leaderboard.userRow.nextLevelExp})`, inline: true },
+        { name: 'You', value: userMention(leaderboard.userRow.user_id), inline: true },
+        {
+          name: 'Your Level',
+          value: `${leaderboard.userRow.level} (${leaderboard.userRow.currentExp}/${leaderboard.userRow.nextLevelExp})`,
+          inline: true,
+        },
       ]);
   }
 

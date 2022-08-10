@@ -6,8 +6,8 @@ import {
   ButtonStyle,
   CommandInteraction,
   EmbedBuilder,
-  Formatters,
   MessageComponentInteraction,
+  userMention,
 } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import Inventory from '../../../storage/models/Inventory';
@@ -73,7 +73,7 @@ class TradeCommand extends SlashCommand {
     const embed = new EmbedBuilder()
       .setTitle('Trade Request!')
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
-      .setDescription(`${Formatters.userMention(interaction.user.id)} wants to trade with you!`)
+      .setDescription(`${userMention(interaction.user.id)} wants to trade with you!`)
       .setTimestamp()
       .setFooter({ text: `This trade request will expire in ${MathUtils.msToMinutes(Config.TRADE_EXPIRY, 0)} minutes.` })
       .addFields([{ name: 'Their offer', value: `${yourQty}x ${yourItem}`, inline: true },
@@ -97,11 +97,11 @@ class TradeCommand extends SlashCommand {
       .addComponents([accept, reject, cancel]);
 
     const msg = await interaction.reply({
-      content: `${Formatters.userMention(user.id)}`, embeds: [embed], components: [row], fetchReply: true,
+      content: `${userMention(user.id)}`, embeds: [embed], components: [row], fetchReply: true,
     });
 
     const filter = (i: MessageComponentInteraction) => (['accept', 'reject'].includes(i.customId) && i.user.id === user.id)
-        || (i.customId === 'cancel' && i.user.id === interaction.user.id);
+            || (i.customId === 'cancel' && i.user.id === interaction.user.id);
     const collector = msg.createMessageComponentCollector({ filter, time: Config.TRADE_EXPIRY });
 
     collector.on('collect', async (i) => {
@@ -118,13 +118,17 @@ class TradeCommand extends SlashCommand {
           const failEmbed = new EmbedBuilder()
             .setTitle('Trade failed!')
             .setDescription('The trade process failed. Please try again later.');
-          await i.update({ content: `${Formatters.userMention(interaction.user.id)} ${Formatters.userMention(user.id)}`, embeds: [failEmbed], components: [] });
+          await i.update({
+            content: `${userMention(interaction.user.id)} ${userMention(user.id)}`,
+            embeds: [failEmbed],
+            components: [],
+          });
         } else {
           const completeEmbed = new EmbedBuilder()
             .setTitle('Trade complete!')
-            .setDescription(`${Formatters.userMention(interaction.user.id)} received **${theirQty}x ${theirItem}**.\n${Formatters.userMention(user.id)} received **${yourQty}x ${yourItem}**.`);
+            .setDescription(`${userMention(interaction.user.id)} received **${theirQty}x ${theirItem}**.\n${userMention(user.id)} received **${yourQty}x ${yourItem}**.`);
           await i.update({
-            content: `${Formatters.userMention(interaction.user.id)}`,
+            content: `${userMention(interaction.user.id)}`,
             embeds: [completeEmbed],
             components: [],
           });
@@ -134,14 +138,14 @@ class TradeCommand extends SlashCommand {
       if (i.customId === 'reject') {
         const rejectEmbed = new EmbedBuilder()
           .setTitle('Trade request rejected!')
-          .setDescription(`${Formatters.userMention(user.id)} rejected your trade request.`);
-        await i.update({ content: `${Formatters.userMention(interaction.user.id)}`, embeds: [rejectEmbed], components: [] });
+          .setDescription(`${userMention(user.id)} rejected your trade request.`);
+        await i.update({ content: `${userMention(interaction.user.id)}`, embeds: [rejectEmbed], components: [] });
         collector.stop();
       }
       if (i.customId === 'cancel') {
         const cancelEmbed = new EmbedBuilder()
           .setTitle('Trade request cancelled')
-          .setDescription(`This trade request was cancelled by ${Formatters.userMention(interaction.user.id)}`);
+          .setDescription(`This trade request was cancelled by ${userMention(interaction.user.id)}`);
         await i.update({ content: '', embeds: [cancelEmbed], components: [] });
         collector.stop();
       }

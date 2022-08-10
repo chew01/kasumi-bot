@@ -1,9 +1,9 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandSubCommandData,
+  channelMention,
   ChannelType,
   ChatInputCommandInteraction,
-  Formatters,
 } from 'discord.js';
 import ActivityChannelCache from '../../../../cache/ActivityChannelCache';
 
@@ -27,5 +27,5 @@ export function activityChannelAdd(interaction: ChatInputCommandInteraction) {
 
   if (ActivityChannelCache.checkChannel(channel.id)) return interaction.reply({ content: 'That channel is already being tracked for activity!' });
   ActivityChannelCache.addChannel(channel.id);
-  return interaction.reply({ content: `The channel ${Formatters.channelMention(channel.id)} was added to the activity tracking list.` });
+  return interaction.reply({ content: `The channel ${channelMention(channel.id)} was added to the activity tracking list.` });
 }

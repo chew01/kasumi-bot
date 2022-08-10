@@ -3,7 +3,7 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
+  roleMention,
 } from 'discord.js';
 import Box from '../../../../storage/models/Box';
 import Lootbox from '../../../../modules/Lootbox';
@@ -54,7 +54,7 @@ export function managerInspectLootbox(interaction: ChatInputCommandInteraction) 
     const item = Item.getOne(reward.item);
     if (!item) return;
     if (item.role_id) {
-      itemString += `${Formatters.roleMention(item.role_id)} - ${reward.odds}%\n`;
+      itemString += `${roleMention(item.role_id)} - ${reward.odds}%\n`;
     } else {
       itemString += `${reward.item} - ${reward.odds}%\n`;
     }

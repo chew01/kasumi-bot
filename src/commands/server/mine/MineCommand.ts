@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionData, CommandInteraction, Formatters } from 'discord.js';
+import { ApplicationCommandOptionData, CommandInteraction, time } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import Member from '../../../storage/models/Member';
 import WorkData from '../../../storage/models/WorkData';
@@ -16,10 +16,10 @@ class MineCommand extends SlashCommand {
     const lastMined = WorkData.getMine(interaction.user.id);
     const nextReset = new Date(lastMined + Config.MINING_COOLDOWN);
 
-    if (new Date() < nextReset) return interaction.reply({ content: `You've just mined recently! Try again ${Formatters.time(nextReset, 'R')}` });
+    if (new Date() < nextReset) return interaction.reply({ content: `You've just mined recently! Try again ${time(nextReset, 'R')}` });
 
     const earnings = Config.MINING_MIN_REWARD
-        + Math.floor(Math.random() * (Config.MINING_MAX_REWARD - Config.MINING_MIN_REWARD));
+            + Math.floor(Math.random() * (Config.MINING_MAX_REWARD - Config.MINING_MIN_REWARD));
     const op = WorkData.incrementMine(interaction.user.id, Date.now(), earnings);
     if (!op) return interaction.reply({ content: Config.ERROR_MSG });
 

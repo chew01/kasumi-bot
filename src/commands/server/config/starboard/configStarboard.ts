@@ -1,9 +1,9 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandSubCommandData,
+  channelMention,
   ChannelType,
   ChatInputCommandInteraction,
-  Formatters,
 } from 'discord.js';
 import emojiRegex from 'emoji-regex';
 import Config from '../../../../Config';
@@ -54,11 +54,11 @@ export async function configStarboard(interaction: ChatInputCommandInteraction) 
 
   const guildChannel = interaction.guild.channels.cache.get(channel.id);
   if (!guildChannel || !guildChannel.permissionsFor(interaction.guild.members.me).has('ViewChannel')
-      || !guildChannel.permissionsFor(interaction.guild.members.me).has('SendMessages')) {
+        || !guildChannel.permissionsFor(interaction.guild.members.me).has('SendMessages')) {
     return interaction.reply({ content: 'I don\'t have permission to send messages in that channel!' });
   }
   if (!unicode.test(emoji) && !custom.test(emoji)) return interaction.reply({ content: 'You did not choose a valid emoji. Try again!' });
 
   await Starboard.setSettings(quota, emoji, channel.id);
-  return interaction.reply({ content: `You have successfully set the Starboard quota at ${quota} ${emoji}, and the channel at ${Formatters.channelMention(channel.id)}` });
+  return interaction.reply({ content: `You have successfully set the Starboard quota at ${quota} ${emoji}, and the channel at ${channelMention(channel.id)}` });
 }

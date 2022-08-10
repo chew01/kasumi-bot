@@ -1,9 +1,9 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandSubCommandData,
+  channelMention,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
 } from 'discord.js';
 import ActivityChannelCache from '../../../../cache/ActivityChannelCache';
 
@@ -17,7 +17,7 @@ export function activityChannelList(interaction: ChatInputCommandInteraction) {
   const channels = ActivityChannelCache.getChannelIds();
   let tracked = '';
   channels.forEach((channel) => {
-    tracked += `${Formatters.channelMention(channel)}\n`;
+    tracked += `${channelMention(channel)}\n`;
   });
 
   const embed = new EmbedBuilder()

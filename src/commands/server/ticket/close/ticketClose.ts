@@ -21,7 +21,10 @@ export async function ticketClose(interaction: ChatInputCommandInteraction) {
 
   let category = Config.getTicketCategory();
   if (!category) {
-    const createdCategory = await interaction.guild.channels.create('tickets', { type: ChannelType.GuildCategory });
+    const createdCategory = await interaction.guild.channels.create({
+      name: 'tickets',
+      type: ChannelType.GuildCategory,
+    });
     await Config.setTicketCategory(createdCategory.id);
     category = createdCategory.id;
   }

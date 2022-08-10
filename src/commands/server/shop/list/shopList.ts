@@ -3,7 +3,7 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
+  roleMention,
 } from 'discord.js';
 import Shop from '../../../../storage/models/Shop';
 
@@ -20,7 +20,7 @@ export function shopList(interaction: ChatInputCommandInteraction) {
   const listings = Shop.getListings();
   if (listings) {
     listings.forEach((listing) => {
-      names += `${listing.role_id ? Formatters.roleMention(listing.role_id) : listing.item_name}\n`;
+      names += `${listing.role_id ? roleMention(listing.role_id) : listing.item_name}\n`;
       types += `${listing.role_id ? 'ROLE' : 'ITEM'}\n`;
       prices += `${listing.price}\n`;
     });

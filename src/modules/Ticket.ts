@@ -1,6 +1,13 @@
 import type { ButtonInteraction, ModalSubmitInteraction } from 'discord.js';
 import {
-  ActionRowBuilder, ChannelType, Formatters, ModalBuilder, TextInputBuilder, TextInputStyle,
+  ActionRowBuilder,
+  channelMention,
+  ChannelType,
+  ModalBuilder,
+  roleMention,
+  TextInputBuilder,
+  TextInputStyle,
+  userMention,
 } from 'discord.js';
 import randomstring from 'randomstring';
 import Config from '../Config';
@@ -26,12 +33,15 @@ export default class Ticket {
 
   public static async create(interaction: ModalSubmitInteraction) {
     if (!interaction.guild || !interaction.client.user
-        || !interaction.guild.members.me || !interaction.isModalSubmit()) {
+            || !interaction.guild.members.me || !interaction.isModalSubmit()) {
       return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
     }
     if (!interaction.guild.members.me.permissions.has('ManageChannels')
-        || !interaction.guild.members.me.permissions.has('ManageRoles')) {
-      return interaction.reply({ content: 'I don\'t have permission to create a new channel/role! Contact a moderator.', ephemeral: true });
+            || !interaction.guild.members.me.permissions.has('ManageRoles')) {
+      return interaction.reply({
+        content: 'I don\'t have permission to create a new channel/role! Contact a moderator.',
+        ephemeral: true,
+      });
     }
 
     let role = Config.getTicketModRole();
@@ -44,21 +54,24 @@ export default class Ticket {
 
     let category = Config.getTicketCategory();
     if (!category) {
-      const createdCategory = await interaction.guild.channels.create('tickets', { type: ChannelType.GuildCategory });
+      const createdCategory = await interaction.guild.channels.create({
+        name: 'tickets',
+        type: ChannelType.GuildCategory,
+      });
       await Config.setTicketCategory(createdCategory.id);
       category = createdCategory.id;
     }
     if (!category) return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
 
     const cachedCategory = interaction.client.channels.cache.get(category);
-    if (!cachedCategory || !cachedCategory.isCategory()) {
+    if (!cachedCategory || cachedCategory.type !== ChannelType.GuildCategory) {
       return interaction.reply({ content: Config.ERROR_MSG, ephemeral: true });
     }
 
     const rand = randomstring.generate(6);
     const channel = await interaction.guild.channels.create(
-      `ticket-${rand}`,
       {
+        name: `ticket-${rand}`,
         parent: cachedCategory,
         permissionOverwrites: [
           { id: interaction.guild.id, deny: ['ViewChannel'] },
@@ -70,8 +83,11 @@ export default class Ticket {
 
     const text = interaction.fields.getTextInputValue('ticket-input');
 
-    await channel.send({ content: `===============================================\n${Formatters.roleMention(role)}, ${Formatters.userMention(interaction.user.id)} **filed a new ticket with the following details 🎫**\n===============================================\n\n${text}` });
+    await channel.send({ content: `===============================================\n${roleMention(role)}, ${userMention(interaction.user.id)} **filed a new ticket with the following details 🎫**\n===============================================\n\n${text}` });
 
-    return interaction.reply({ content: `Your ticket was created at ${Formatters.channelMention(channel.id)}!`, ephemeral: true });
+    return interaction.reply({
+      content: `Your ticket was created at ${channelMention(channel.id)}!`,
+      ephemeral: true,
+    });
   }
 }

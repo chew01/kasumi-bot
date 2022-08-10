@@ -3,7 +3,7 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
+  roleMention,
 } from 'discord.js';
 import Item from '../../../../storage/models/Item';
 
@@ -21,7 +21,7 @@ export function managerItemList(interaction: ChatInputCommandInteraction) {
 
   let roleString = '';
   roles.forEach((role) => {
-    roleString += `${Formatters.roleMention(role.role_id)}\n`;
+    roleString += `${roleMention(role.role_id)}\n`;
   });
   let boxString = '';
   let keyString = '';

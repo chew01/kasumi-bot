@@ -107,6 +107,7 @@ namespace Config {
   export const BLACKJACK_MIN_BET: number = Games.gambling.blackjack.minimumBet;
   export const BLACKJACK_MAX_BET: number = Games.gambling.blackjack.maximumBet;
   export const BLACKJACK_MULTIPLIER: number = Games.gambling.blackjack.multiplier;
+  export const BLACKJACK_NATURAL: number = Games.gambling.blackjack.natural;
   export const BLACKJACK_INACTIVITY: number = Games.gambling.blackjack.inactivity;
 
   export const ROULETTE_MIN_BET: number = Games.gambling.roulette.minimumBet;

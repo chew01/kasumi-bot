@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionData, CommandInteraction, Formatters } from 'discord.js';
+import { ApplicationCommandOptionData, CommandInteraction, time } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import WorkData from '../../../storage/models/WorkData';
 import Member from '../../../storage/models/Member';
@@ -24,7 +24,7 @@ class DailyCommand extends SlashCommand {
     // Already claimed today
     if (lastClaimed >= resetTime) {
       const nextReset = new Date(resetTime.getTime() + 24 * 60 * 60 * 1000);
-      return interaction.reply({ content: `You've already claimed your daily ${Config.CURRENCY_NAME_PLURAL}! Try again ${Formatters.time(nextReset, 'R')}` });
+      return interaction.reply({ content: `You've already claimed your daily ${Config.CURRENCY_NAME_PLURAL}! Try again ${time(nextReset, 'R')}` });
     }
 
     // Did not claim yesterday

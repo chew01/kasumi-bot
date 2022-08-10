@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionData, CommandInteraction, Formatters } from 'discord.js';
+import { ApplicationCommandOptionData, CommandInteraction, time } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import Member from '../../../storage/models/Member';
 import WorkData from '../../../storage/models/WorkData';
@@ -16,10 +16,10 @@ class FishCommand extends SlashCommand {
     const lastFished = WorkData.getFish(interaction.user.id);
     const nextReset = new Date(lastFished + Config.FISHING_COOLDOWN);
 
-    if (new Date() < nextReset) return interaction.reply({ content: `You've just fished recently! Try again ${Formatters.time(nextReset, 'R')}` });
+    if (new Date() < nextReset) return interaction.reply({ content: `You've just fished recently! Try again ${time(nextReset, 'R')}` });
 
     const earnings = Config.FISHING_MIN_REWARD
-        + Math.floor(Math.random() * (Config.FISHING_MAX_REWARD - Config.FISHING_MIN_REWARD));
+            + Math.floor(Math.random() * (Config.FISHING_MAX_REWARD - Config.FISHING_MIN_REWARD));
     const op = WorkData.incrementFish(interaction.user.id, Date.now(), earnings);
     if (!op) return interaction.reply({ content: Config.ERROR_MSG });
 

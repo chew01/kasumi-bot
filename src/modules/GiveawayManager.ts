@@ -1,4 +1,6 @@
-import { EmbedBuilder, Formatters } from 'discord.js';
+import {
+  ChannelType, EmbedBuilder, roleMention, userMention,
+} from 'discord.js';
 import Giveaway from '../storage/models/Giveaway';
 import { client } from '../ExtendedClient';
 import Logger from '../services/Logger';
@@ -47,7 +49,7 @@ class GiveawayManager {
       try {
         // Fetch channel
         const channel = await client.channels.fetch(channelId);
-        if (channel && channel.isText()) {
+        if (channel && channel.type === ChannelType.GuildText) {
           // Fetch message
           const msg = await channel.messages.fetch(messageId);
           if (msg) {
@@ -91,9 +93,9 @@ class GiveawayManager {
             const winner = tickets[Math.floor(Math.random() * tickets.length)];
             const winEmbed = new EmbedBuilder()
               .setTitle('🎉 Giveaway Ended! 🎉')
-              .setDescription(`CONGRATULATIONS!\nThe winner is ${Formatters.userMention(winner!.userId)}!\n\nPrize: **${prize}**\nThis giveaway was hosted by ${Formatters.userMention(host)}\nA total of __${userCount} users__ and __${ticketCount} entries__ were counted.`);
+              .setDescription(`CONGRATULATIONS!\nThe winner is ${userMention(winner!.userId)}!\n\nPrize: **${prize}**\nThis giveaway was hosted by ${userMention(host)}\nA total of __${userCount} users__ and __${ticketCount} entries__ were counted.`);
 
-            await msg.reply({ content: `${Formatters.userMention(winner!.userId)}`, embeds: [winEmbed] });
+            await msg.reply({ content: `${userMention(winner!.userId)}`, embeds: [winEmbed] });
             await msg.delete();
           }
         }
@@ -144,7 +146,7 @@ class GiveawayManager {
     try {
       // Fetch channel
       const channel = await client.channels.fetch(data.channel_id);
-      if (channel && channel.isText()) {
+      if (channel && channel.type === ChannelType.GuildText) {
         // Fetch message
         const msg = await channel.messages.fetch(messageId);
         if (msg) {
@@ -173,7 +175,7 @@ class GiveawayManager {
 
     try {
       const channel = await client.channels.fetch(data.channel_id);
-      if (channel && channel.isText()) {
+      if (channel && channel.type === ChannelType.GuildText) {
         // Fetch message
         const msg = await channel.messages.fetch(messageId);
         if (msg) {
@@ -185,27 +187,27 @@ class GiveawayManager {
           let existingMultiplier = embed.fields[2]!.value;
 
           if (field === 0) {
-            if (existingRequired === 'None') existingRequired = `${Formatters.roleMention(role)}`;
+            if (existingRequired === 'None') existingRequired = `${roleMention(role)}`;
             else {
               const parsed = GiveawayManager.parseRoles(existingRequired);
               if (parsed.includes(role)) return false;
-              existingRequired += ` ${Formatters.roleMention(role)}`;
+              existingRequired += ` ${roleMention(role)}`;
             }
           }
           if (field === 1) {
-            if (existingBypass === 'None') existingBypass = `${Formatters.roleMention(role)}`;
+            if (existingBypass === 'None') existingBypass = `${roleMention(role)}`;
             else {
               const parsed = GiveawayManager.parseRoles(existingBypass);
               if (parsed.includes(role)) return false;
-              existingBypass += ` ${Formatters.roleMention(role)}`;
+              existingBypass += ` ${roleMention(role)}`;
             }
           }
           if (field === 2) {
-            if (existingMultiplier === 'None') existingMultiplier = `${Formatters.roleMention(role)} - ${multiplier}`;
+            if (existingMultiplier === 'None') existingMultiplier = `${roleMention(role)} - ${multiplier}`;
             else {
               const parsed = GiveawayManager.parseMultipliers(existingMultiplier);
               if (parsed.some((multi) => multi.id === role)) return false;
-              existingMultiplier += `\n${Formatters.roleMention(role)} - ${multiplier}`;
+              existingMultiplier += `\n${roleMention(role)} - ${multiplier}`;
             }
           }
 

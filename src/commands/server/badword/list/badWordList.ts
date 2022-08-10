@@ -3,7 +3,7 @@ import {
   ApplicationCommandSubCommandData,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  Formatters,
+  userMention,
 } from 'discord.js';
 import BadWordCache from '../../../../cache/BadWordCache';
 
@@ -19,7 +19,7 @@ export function badWordList(interaction: ChatInputCommandInteraction) {
   let users = '';
   list.forEach((bw) => {
     words += `${bw.word}\n`;
-    users += `${Formatters.userMention(bw.user_id)}\n`;
+    users += `${userMention(bw.user_id)}\n`;
   });
 
   const embed = new EmbedBuilder()

@@ -1,9 +1,9 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandSubCommandData,
+  channelMention,
   ChannelType,
   ChatInputCommandInteraction,
-  Formatters,
 } from 'discord.js';
 import Config from '../../../../Config';
 
@@ -39,5 +39,5 @@ export async function configTicketCategory(interaction: ChatInputCommandInteract
 
   await Config.setTicketCategory(category.id);
 
-  return interaction.reply({ content: `Successfully set ticket category to ${Formatters.channelMention(category.id)}` });
+  return interaction.reply({ content: `Successfully set ticket category to ${channelMention(category.id)}` });
 }
