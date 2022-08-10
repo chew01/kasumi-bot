@@ -4,6 +4,7 @@
     "minimumBet": 1,
     "maximumBet": 50,
     "multiplier": 2,
+    "natural": 2.5,
     "inactivity": 90000
   },
   "coinflip": {

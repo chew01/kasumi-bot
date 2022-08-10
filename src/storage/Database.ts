@@ -41,5 +41,8 @@ export default class Database {
     const conn = this.connect();
     const statements = initializeDB.map((stmt) => conn.prepare(stmt));
     statements.forEach((stmt) => stmt.run());
+
+    this.execute('INSERT INTO item_type (item_name, role_id) VALUES (@name, null) ON CONFLICT DO NOTHING', { name: 'Chat Loot Box' });
+    this.execute('INSERT INTO item_type (item_name, role_id) VALUES (@name, null) ON CONFLICT DO NOTHING', { name: 'Daily Loot Box' });
   }
 }
