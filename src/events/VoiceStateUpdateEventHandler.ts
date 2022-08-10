@@ -3,6 +3,7 @@ import BotEventHandler from '../types/BotEventHandler';
 import type ExtendedClient from '../ExtendedClient';
 import VoiceParticipationCache from '../cache/VoiceParticipationCache';
 import MemberCache from '../cache/MemberCache';
+import Config from '../Config';
 
 class VoiceStateUpdateEventHandler extends BotEventHandler {
   name = 'voiceStateUpdate';
@@ -10,6 +11,8 @@ class VoiceStateUpdateEventHandler extends BotEventHandler {
   once = false;
 
   async execute(_client: ExtendedClient, _oldState: VoiceState, newState: VoiceState) {
+    if (newState.guild.id !== Config.GUILD_ID) return null;
+
     if (newState.channelId && newState.member
         && newState.channelId !== newState.guild.afkChannelId) {
       MemberCache.initialiseIfNotExists(newState.id);
@@ -17,6 +20,8 @@ class VoiceStateUpdateEventHandler extends BotEventHandler {
     } else {
       VoiceParticipationCache.leave(newState.id);
     }
+
+    return null;
   }
 }
 

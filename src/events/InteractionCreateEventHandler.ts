@@ -1,4 +1,5 @@
-import type { CommandInteraction } from 'discord.js';
+import type { Interaction } from 'discord.js';
+import { InteractionType } from 'discord.js';
 import BotEventHandler from '../types/BotEventHandler';
 import Logger from '../services/Logger';
 import type ExtendedClient from '../ExtendedClient';
@@ -10,8 +11,10 @@ class InteractionCreateEventHandler extends BotEventHandler {
 
   once = false;
 
-  async execute(client: ExtendedClient, interaction: CommandInteraction) {
-    if (interaction.isCommand()) {
+  async execute(client: ExtendedClient, interaction: Interaction) {
+    if (interaction.user.bot) return null;
+
+    if (interaction.type === InteractionType.ApplicationCommand) {
       MemberCache.initialiseIfNotExists(interaction.user.id);
       Logger.logCommand(interaction, 'Trigger', interaction.commandName);
       const slashCommand = await client.commands.handle(interaction.commandName);
@@ -27,9 +30,19 @@ class InteractionCreateEventHandler extends BotEventHandler {
         return Logger.logCommand(interaction, 'Success', interaction.commandName);
       } catch (err) {
         Logger.logCommand(interaction, 'Failure', interaction.commandName);
-        if (!interaction.deferred) await interaction.reply({ content: 'Uh oh! We were unable to execute your command.', ephemeral: true });
-        else await interaction.followUp({ content: 'Uh oh! We were unable to execute your command.', ephemeral: true });
+        if (!interaction.deferred) {
+          await interaction.reply({
+            content: 'Uh oh! We were unable to execute your command.',
+            ephemeral: true,
+          });
+        } else {
+          await interaction.followUp({
+            content: 'Uh oh! We were unable to execute your command.',
+            ephemeral: true,
+          });
+        }
       }
+      return null;
     }
 
     if (interaction.isButton()) {

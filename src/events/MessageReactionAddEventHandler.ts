@@ -3,6 +3,7 @@ import BotEventHandler from '../types/BotEventHandler';
 import type ExtendedClient from '../ExtendedClient';
 import Logger from '../services/Logger';
 import Starboard from '../modules/Starboard';
+import Config from '../Config';
 
 class MessageReactionAddEventHandler extends BotEventHandler {
   name = 'messageReactionAdd';
@@ -10,6 +11,8 @@ class MessageReactionAddEventHandler extends BotEventHandler {
   once = false;
 
   async execute(_client: ExtendedClient, reaction: MessageReaction) {
+    if (!reaction.message.guild || reaction.message.guild.id !== Config.GUILD_ID) return null;
+
     if (reaction.partial) {
       try {
         await reaction.fetch();

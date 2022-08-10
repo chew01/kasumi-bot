@@ -1,5 +1,5 @@
 import type { Message } from 'discord.js';
-import { Formatters } from 'discord.js';
+import { ChannelType, userMention } from 'discord.js';
 import BotEventHandler from '../types/BotEventHandler';
 import type ExtendedClient from '../ExtendedClient';
 import ActivityChannelCache from '../cache/ActivityChannelCache';
@@ -17,19 +17,20 @@ class InteractionCreateEventHandler extends BotEventHandler {
   once = false;
 
   async execute(_client: ExtendedClient, message: Message) {
-    if (message.author.bot || !message.member) return null;
+    if (message.author.bot || !message.member
+            || !message.guild || message.guild.id !== Config.GUILD_ID) return null;
 
     // Bad word checks
     if (BadWordCache.check(message.content)) {
       await message.delete();
-      return message.channel.send({ content: `${Formatters.userMention(message.author.id)} ${Config.BADWORD_MSG}` });
+      return message.channel.send({ content: `${userMention(message.author.id)} ${Config.BADWORD_MSG}` });
     }
 
     // Antiraid checks
     if (message.member.joinedTimestamp
-        && (Date.now() - message.member.joinedTimestamp) < 48 * 60 * 60 * 1000) {
+            && (Date.now() - message.member.joinedTimestamp) < 48 * 60 * 60 * 1000) {
       const count = AntiRaid.add(message.content);
-      if (count >= Config.ANTIRAID_QUOTA && message.channel.isText()) {
+      if (count >= Config.ANTIRAID_QUOTA && message.channel.type === ChannelType.GuildText) {
         message.channel.setRateLimitPerUser(Config.ANTIRAID_RATELIMIT, 'Anti-Raid');
       }
     }
