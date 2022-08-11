@@ -198,7 +198,7 @@ export default class Blackjack {
   }
 
   public playerStand(): void {
-    if (Blackjack.count(this.playerCards) >= Blackjack.count(this.dealerCards)) this.dealerPlay();
+    this.dealerPlay();
     if (this.winner === 'None') this.calculate();
   }
 

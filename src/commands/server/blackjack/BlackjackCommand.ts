@@ -68,7 +68,7 @@ class BlackjackCommand extends SlashCommand {
       });
 
       bal = Member.addMoney(interaction.user.id, Math.floor(currentBet * Config.BLACKJACK_NATURAL));
-      description = `You bet ${CurrencyUtils.format(currentBet)} and earned ${CurrencyUtils.format(currentBet * Config.BLACKJACK_NATURAL)}\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
+      description = `You bet ${CurrencyUtils.format(currentBet)} and earned ${CurrencyUtils.format(Math.floor(currentBet * Config.BLACKJACK_NATURAL))}\nYou now have ${CurrencyUtils.formatEmoji(bal)}`;
     }
     if (startingCheck === 'Draw') {
       ended = true;
