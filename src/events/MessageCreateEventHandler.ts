@@ -41,6 +41,7 @@ class InteractionCreateEventHandler extends BotEventHandler {
     // Activity channel reward checks
     if (ActivityChannelCache.checkChannel(message.channel.id)) {
       const onCooldown = ActivityChannelCache.checkUser(message.author.id);
+
       if (!onCooldown) {
         let income: number;
         let exp: number;

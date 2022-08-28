@@ -60,13 +60,13 @@ export default class Member {
     const totalExp = res.experience;
     const previousLevel = res.level;
 
-    if (totalExp < 300) {
+    if (totalExp < 1600) {
       return {
-        previousLevel: 1, level: 1, totalExp, currentExp: totalExp, nextLevelExp: 300,
+        previousLevel: 1, level: 1, totalExp, currentExp: totalExp, nextLevelExp: 1600,
       };
     }
 
-    const level = Math.floor((Math.sqrt(2 * totalExp + 25) - 5) / 10);
+    const level = 0.05 * Math.floor(Math.sqrt(totalExp));
     const currentExp = totalExp - MathUtils.formatExperience(level);
     const nextLevelExp = MathUtils.formatExperience(level + 1) - MathUtils.formatExperience(level);
 
@@ -95,12 +95,12 @@ export default class Member {
       const nextLevelExp = MathUtils.formatExperience(row.level + 1)
           - MathUtils.formatExperience(row.level);
 
-      if (row.experience < 300) {
+      if (row.experience < 1600) {
         return {
           user_id: row.user_id,
           level: 1,
           currentExp: row.experience,
-          nextLevelExp: 300,
+          nextLevelExp: 1600,
           exp_rank: row.exp_rank,
         };
       }
@@ -118,12 +118,12 @@ export default class Member {
     const nextLevelExp = MathUtils.formatExperience(user.level + 1)
         - MathUtils.formatExperience(user.level);
 
-    if (user.experience < 300) {
+    if (user.experience < 1600) {
       userRow = {
         user_id: user.user_id,
         level: 1,
         currentExp: user.experience,
-        nextLevelExp: 300,
+        nextLevelExp: 1600,
         exp_rank: user.exp_rank,
       };
     } else {

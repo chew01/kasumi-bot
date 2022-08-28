@@ -18,7 +18,7 @@ export default class MathUtils {
   }
 
   public static formatExperience(level: number) {
-    return 50 * level * (level + 1);
+    return (level / 0.05) ** 2;
   }
 
   public static randomInRange(min: number, max: number) {
