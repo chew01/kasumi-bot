@@ -46,9 +46,14 @@ export default class Database {
     Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@item_name, null) ON CONFLICT DO NOTHING', { item_name: 'Chat Loot Key' });
     Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@item_name, null) ON CONFLICT DO NOTHING', { item_name: 'Daily Loot Box' });
     Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@item_name, null) ON CONFLICT DO NOTHING', { item_name: 'Daily Loot Key' });
+    Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@item_name, null) ON CONFLICT DO NOTHING', { item_name: 'Level Up Box' });
+    Database.execute('INSERT INTO item_type (item_name, role_id) VALUES (@item_name, null) ON CONFLICT DO NOTHING', { item_name: 'Level Up Key' });
+
     Database.execute(`INSERT INTO box (box_name, key_name, coin_minimum, coin_maximum, rewards) 
                             VALUES (@box_name, @key_name, 0, 0, @rewards) ON CONFLICT DO NOTHING`, { box_name: 'Chat Loot Box', key_name: 'Chat Loot Key', rewards: '' });
     Database.execute(`INSERT INTO box (box_name, key_name, coin_minimum, coin_maximum, rewards) 
                             VALUES (@box_name, @key_name, 0, 0, @rewards) ON CONFLICT DO NOTHING`, { box_name: 'Daily Loot Box', key_name: 'Daily Loot Key', rewards: '' });
+    Database.execute(`INSERT INTO box (box_name, key_name, coin_minimum, coin_maximum, rewards) 
+                            VALUES (@box_name, @key_name, 0, 0, @rewards) ON CONFLICT DO NOTHING`, { box_name: 'Level Up Box', key_name: 'Level Up Key', rewards: '' });
   }
 }

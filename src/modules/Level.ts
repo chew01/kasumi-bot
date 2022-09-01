@@ -37,7 +37,7 @@ export default class Level {
       if (data.level === 5 && Config.LEVEL_ROLES[0] && Config.LEVEL_ROLES[1]) {
         await member.roles.remove(Config.LEVEL_ROLES[0]);
         await member.roles.add(Config.LEVEL_ROLES[1]);
-        Inventory.give(member.id, 'Chat Loot Box', 1);
+        Inventory.give(member.id, 'Level Up Box', 1);
 
         if (message) {
           await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
@@ -54,7 +54,7 @@ export default class Level {
         if (prevRole && role) {
           await member.roles.remove(prevRole);
           await member.roles.add(role);
-          Inventory.give(member.id, 'Chat Loot Box', 1);
+          Inventory.give(member.id, 'Level Up Box', 1);
           if (message) {
             await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
           }
@@ -63,7 +63,7 @@ export default class Level {
       }
 
       // If member leveled up but not at milestone
-      Inventory.give(member.id, 'Chat Loot Box', 1);
+      Inventory.give(member.id, 'Level Up Box', 1);
       if (message) {
         await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**!` });
       }
