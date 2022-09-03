@@ -25,7 +25,7 @@ export default class WorkData {
           SET last_daily = @time, daily_streak = daily_streak + 1
           WHERE user_id = @user_id`,
         `UPDATE member
-          SET coin = coin = @coin
+          SET coin = coin + @coin
           WHERE user_id = @user_id`,
         `INSERT INTO member_inventory (user_id, item_name, quantity) 
           VALUES (@user_id, @reward_name, @reward_quantity)
