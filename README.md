@@ -1,6 +1,6 @@
-# Republic of Weebs Bot Project
+# Kasumi Bot Project
 
-This is Milestone 2 of the Republic of Weebs Bot Project by kitsuiro.
+This is Milestone 2 of the Kasumi Bot Project by kitsuiro.
 
 ### Features
 
