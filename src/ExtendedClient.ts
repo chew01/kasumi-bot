@@ -7,6 +7,7 @@ import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
 import Logger from './services/Logger';
 import Database from './storage/Database';
+import AniListAPI from './modules/Anilist';
 
 export default class ExtendedClient extends Client {
   private readonly events: BotEventHandler[];
@@ -55,4 +56,6 @@ export default class ExtendedClient extends Client {
 }
 
 export const client = new ExtendedClient();
+export const anilist = new AniListAPI(client, Config.getAnilistChannel(), Config.getAnilistRole());
 client.initialise();
+anilist.startDailyPost();
