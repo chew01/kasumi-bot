@@ -29,6 +29,28 @@ class Config {
     };
   }
 
+  public static async setAnilistChannel(channel_id: string): Promise<void> {
+    Settings.anilist.channel = channel_id;
+    await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
+      if (err) { Logger.error(err.message); }
+    });
+  }
+
+  public static getAnilistChannel(): string {
+    return Settings.anilist.channel;
+  }
+
+  public static async setAnilistRole(channel_id: string): Promise<void> {
+    Settings.anilist.channel = channel_id;
+    await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
+      if (err) { Logger.error(err.message); }
+    });
+  }
+
+  public static getAnilistRole(): string {
+    return Settings.anilist.role;
+  }
+
   public static async setTicketCategory(category_id: string): Promise<void> {
     Settings.ticket.category = category_id;
     await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
