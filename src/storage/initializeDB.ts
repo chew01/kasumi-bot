@@ -82,6 +82,10 @@ const initializeDB = [
     prize TEXT NOT NULL,
     host TEXT NOT NULL
     );`,
+
+  `CREATE TABLE IF NOT EXISTS anilist (
+    media_id PRIMARY KEY
+   );`,
 ];
 
 export default initializeDB;
