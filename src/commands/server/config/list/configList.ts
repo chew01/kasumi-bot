@@ -20,6 +20,8 @@ export function configList(interaction: ChatInputCommandInteraction) {
   const ticketModRole = Config.getTicketModRole();
   const { quota, emoji, channel } = Starboard.getSettings();
   const autoroles = Config.getAutoRoles().map((roleId) => roleMention(roleId)).join('\n');
+  const anilistChannel = Config.getAnilistChannel();
+  const anilistRole = Config.getAnilistRole();
 
   const embed = new EmbedBuilder()
     .setTitle('⚙ Server Configuration ⚙')
@@ -31,6 +33,14 @@ export function configList(interaction: ChatInputCommandInteraction) {
       {
         name: 'Ticket Mod Role',
         value: ticketModRole ? `${roleMention(ticketModRole)} (ID: ${ticketModRole})` : 'Not set',
+      },
+      {
+        name: 'Anime Notification Channel',
+        value: anilistChannel ? `${channelMention(anilistChannel)} (ID: ${anilistChannel})` : 'Not set',
+      },
+      {
+        name: 'Anime Notification Role',
+        value: anilistRole ? `${roleMention(anilistRole)} (ID: ${anilistRole})` : 'Not set',
       },
       { name: 'Starboard Quota', value: `${quota}` },
       { name: 'Starboard Emoji', value: emoji ? `${emoji}` : 'Not set' },
