@@ -121,6 +121,7 @@ class AniListAPI {
       });
 
       embed.addFields(field);
+      console.log(embed);
       (this.bot.channels.cache.get(this.channelId) as TextBasedChannel).send({
         content: `<@&${this.roleId}>`, embeds: [embed],
       });
