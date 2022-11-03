@@ -25,6 +25,9 @@ export default class Level {
       if (data.previousLevel === data.level && data.level >= 5) {
         const qualifiedRole = Config.LEVEL_ROLES[Math.floor(data.level / 5)];
         if (qualifiedRole && !member.roles.cache.some((role) => role.id === qualifiedRole)) {
+          const existingRoles = member.roles.cache
+            .filter((role) => Config.LEVEL_ROLES.includes(role.id));
+          existingRoles.forEach((role) => member.roles.remove(role.id));
           await member.roles.add(qualifiedRole);
         }
         return;
@@ -33,30 +36,34 @@ export default class Level {
 
     // New level is greater than previous level (level up)
     if (data.level > data.previousLevel) {
-      // If member just reached Level 5
-      if (data.level === 5 && Config.LEVEL_ROLES[0] && Config.LEVEL_ROLES[1]) {
-        await member.roles.remove(Config.LEVEL_ROLES[0]);
-        await member.roles.add(Config.LEVEL_ROLES[1]);
-        Inventory.give(member.id, 'Level Up Box', 1);
+      // If member reached above Level 50 but does not have tag
+      if (data.level >= 50 && Config.LEVEL_ROLES[10]
+          && !member.roles.cache.some((role) => role.id === Config.LEVEL_ROLES[10])) {
+        const existingRoles = member.roles.cache
+          .filter((role) => Config.LEVEL_ROLES.includes(role.id));
+        existingRoles.forEach((role) => member.roles.remove(role.id));
+        await member.roles.add(Config.LEVEL_ROLES[10]);
+        Inventory.give(member.id, 'Level Up Box', data.level - data.previousLevel);
 
         if (message) {
-          await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+          await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level 50** tag.` });
         }
         return;
       }
 
-      // If member level just reached multiple of 5, up to 50
-      if (data.level % 5 === 0 && data.level <= 50) {
-        const prevRole = Config.LEVEL_ROLES[(data.level / 5) - 1];
-        const role = Config.LEVEL_ROLES[data.level / 5];
+      const qualifiedRole = Config.LEVEL_ROLES[Math.floor(data.level / 5)];
+      // If member above level 5
+      if (data.level >= 5) {
+        // If does not have highest qualified role, give it
+        if (qualifiedRole && !member.roles.cache.some((role) => role.id === qualifiedRole)) {
+          const existingRoles = member.roles.cache
+            .filter((role) => Config.LEVEL_ROLES.includes(role.id));
+          existingRoles.forEach((role) => member.roles.remove(role.id));
+          await member.roles.add(qualifiedRole);
+          Inventory.give(member.id, 'Level Up Box', data.level - data.previousLevel);
 
-        // Swap roles and inform
-        if (prevRole && role) {
-          await member.roles.remove(prevRole);
-          await member.roles.add(role);
-          Inventory.give(member.id, 'Level Up Box', 1);
           if (message) {
-            await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${data.level}** tag.` });
+            await message.channel.send({ content: `${userMention(member.id)} is now **Level ${data.level}**! You have gained the **Level ${Math.floor(data.level / 5) * 5}** tag.` });
           }
           return;
         }
