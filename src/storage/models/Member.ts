@@ -66,11 +66,11 @@ export default class Member {
       };
     }
 
-    const level = 0.05 * Math.floor(Math.sqrt(totalExp));
+    const level = Math.floor(0.05 * Math.sqrt(totalExp));
     const currentExp = totalExp - MathUtils.formatExperience(level);
     const nextLevelExp = MathUtils.formatExperience(level + 1) - MathUtils.formatExperience(level);
 
-    if (previousLevel < level) this.incrementLevel(user_id);
+    if (previousLevel < level) this.incrementLevel(user_id, level - previousLevel);
 
     return {
       previousLevel, level, totalExp, currentExp, nextLevelExp,
@@ -82,8 +82,8 @@ export default class Member {
     return this.getExperience(user_id);
   }
 
-  public static incrementLevel(user_id: string): void {
-    Database.execute('UPDATE member SET level = level + 1 WHERE user_id = @user_id', { user_id });
+  public static incrementLevel(user_id: string, inc: number): void {
+    Database.execute('UPDATE member SET level = level + @inc WHERE user_id = @user_id', { user_id, inc });
   }
 
   public static getLeaderboard(user_id: string): LeaderboardType {
