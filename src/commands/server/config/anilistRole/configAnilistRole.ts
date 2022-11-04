@@ -25,7 +25,7 @@ export async function configAnilistRole(interaction: ChatInputCommandInteraction
   }
 
   if (!interaction.guild.members.me.permissions.has('ManageRoles')) return interaction.reply({ content: 'I don\'t have permission to manage roles!' });
-  await Config.setTicketModRole(role.id);
+  await Config.setAnilistRole(role.id);
 
   return interaction.reply({ content: `Successfully set anime notification role to **${role.name}**` });
 }

@@ -40,8 +40,8 @@ class Config {
     return Settings.anilist.channel;
   }
 
-  public static async setAnilistRole(channel_id: string): Promise<void> {
-    Settings.anilist.channel = channel_id;
+  public static async setAnilistRole(role_id: string): Promise<void> {
+    Settings.anilist.role = role_id;
     await fs.writeFile(`${__dirname}/../config/settings.json`, JSON.stringify(Settings, null, 2), (err) => {
       if (err) { Logger.error(err.message); }
     });

@@ -107,27 +107,28 @@ class AniListAPI {
       value: '',
     };
 
-    // eslint-disable-next-line no-new
+    // eslint-disable-next-line
     new CronJob('00 00 00 * * *', async () => {
       (await this.getDailySchedule()).forEach((anime: AiringSchedule) => {
         const airingSchedule = anime.data.AiringSchedule;
         if (anime.errors) {
           this.removeFromDb(airingSchedule.mediaId);
-        } else {
+        } else if (airingSchedule.airingAt
+            - Math.floor(new Date().getTime() / 1000) < 24 * 60 * 60) {
           const title = airingSchedule.media.title.english;
-          // const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
-          // console.log(`Episode: ${airingSchedule.episode}`);
-          // console.log(`Title: ${title}`);
-          // console.log(`URL: ${url}`);
-          // console.log(`Field value:${field.value}`);
-          field.value += `♡ ♦ Episode ${airingSchedule.episode} - ${title}\n`;
+          const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
+          field.value += `♡ \\♦️️ Episode ${airingSchedule.episode} - [${title}](${url})\n`;
         }
       });
 
-      embed.addFields([field]);
+      if (field.value === '') {
+        field.value = 'Nothing yet!';
+      }
+
+      embed.setFields([field]);
       (this.bot.channels.cache.get(this.channelId) as TextBasedChannel).send({
         content: `<@&${this.roleId}>`, embeds: [embed],
-      });
+      }).then(() => { field.value = ''; });
     }, null, true, 'EST');
   }
 }
