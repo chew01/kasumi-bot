@@ -115,12 +115,12 @@ class AniListAPI {
           this.removeFromDb(airingSchedule.mediaId);
         } else {
           const title = airingSchedule.media.title.english;
-          const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
+          // const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
           // console.log(`Episode: ${airingSchedule.episode}`);
           // console.log(`Title: ${title}`);
           // console.log(`URL: ${url}`);
           console.log(`Field value:${field.value}`);
-          field.value += `♡ ♦ Episode ${airingSchedule.episode} - [${title}](${url})\n`;
+          field.value += `♡ ♦ Episode ${airingSchedule.episode} - ${title}\n`;
         }
       });
 
