@@ -108,7 +108,7 @@ class AniListAPI {
     };
 
     // eslint-disable-next-line no-new
-    new CronJob('* * * * *', async () => {
+    new CronJob('00 00 00 * * *', async () => {
       (await this.getDailySchedule()).forEach((anime: AiringSchedule) => {
         const airingSchedule = anime.data.AiringSchedule;
         if (anime.errors) {
@@ -119,7 +119,7 @@ class AniListAPI {
           // console.log(`Episode: ${airingSchedule.episode}`);
           // console.log(`Title: ${title}`);
           // console.log(`URL: ${url}`);
-          console.log(`Field value:${field.value}`);
+          // console.log(`Field value:${field.value}`);
           field.value += `♡ ♦ Episode ${airingSchedule.episode} - ${title}\n`;
         }
       });
