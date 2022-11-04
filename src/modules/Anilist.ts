@@ -108,7 +108,7 @@ class AniListAPI {
     };
 
     // eslint-disable-next-line no-new
-    new CronJob('00 00 00 * * *', async () => {
+    new CronJob('* * * * *', async () => {
       (await this.getDailySchedule()).forEach((anime: AiringSchedule) => {
         const airingSchedule = anime.data.AiringSchedule;
         if (anime.errors) {
@@ -116,12 +116,15 @@ class AniListAPI {
         } else {
           const title = airingSchedule.media.title.english;
           const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
+          // console.log(`Episode: ${airingSchedule.episode}`);
+          // console.log(`Title: ${title}`);
+          // console.log(`URL: ${url}`);
+          // console.log(`Field value:${field.value}`);
           field.value += `♡ ♦ Episode ${airingSchedule.episode} - [${title}](${url})`;
         }
       });
 
       embed.addFields(field);
-      console.log(embed);
       (this.bot.channels.cache.get(this.channelId) as TextBasedChannel).send({
         content: `<@&${this.roleId}>`, embeds: [embed],
       });
