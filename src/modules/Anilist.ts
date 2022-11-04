@@ -120,11 +120,11 @@ class AniListAPI {
           // console.log(`Title: ${title}`);
           // console.log(`URL: ${url}`);
           console.log(`Field value:${field.value}`);
-          field.value += `♡ ♦ Episode ${airingSchedule.episode} - [${title}](${url})`;
+          field.value += `♡ ♦ Episode ${airingSchedule.episode} - [${title}](${url})\n`;
         }
       });
 
-      embed.addFields(field);
+      embed.addFields([field]);
       (this.bot.channels.cache.get(this.channelId) as TextBasedChannel).send({
         content: `<@&${this.roleId}>`, embeds: [embed],
       });
