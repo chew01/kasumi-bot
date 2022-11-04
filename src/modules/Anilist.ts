@@ -119,7 +119,7 @@ class AniListAPI {
           // console.log(`Episode: ${airingSchedule.episode}`);
           // console.log(`Title: ${title}`);
           // console.log(`URL: ${url}`);
-          // console.log(`Field value:${field.value}`);
+          console.log(`Field value:${field.value}`);
           field.value += `♡ ♦ Episode ${airingSchedule.episode} - [${title}](${url})`;
         }
       });
