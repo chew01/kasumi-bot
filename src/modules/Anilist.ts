@@ -64,7 +64,7 @@ class AniListAPI {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public async fetchMediaAiring(mediaId: number): Promise<AiringSchedule> {
+  public async fetchMediaAiring(mediaId: number): Promise<{ schedule: AiringSchedule, mediaId: number }> {
     const response = await fetch('https://graphql.anilist.co', {
       method: 'POST',
       headers: {
@@ -77,7 +77,8 @@ class AniListAPI {
       }),
     });
 
-    return (await response.json()) as AiringSchedule;
+    const schedule = (await response.json()) as AiringSchedule;
+    return { schedule, mediaId };
   }
 
   public getDailySchedule() {
@@ -109,10 +110,10 @@ class AniListAPI {
 
     // eslint-disable-next-line
     new CronJob('00 00 00 * * *', async () => {
-      (await this.getDailySchedule()).forEach((anime: AiringSchedule) => {
-        const airingSchedule = anime.data.AiringSchedule;
-        if (anime.errors) {
-          this.removeFromDb(airingSchedule.mediaId);
+      (await this.getDailySchedule()).forEach((anime: { schedule: AiringSchedule, mediaId: number }) => {
+        const airingSchedule = anime.schedule.data.AiringSchedule;
+        if (anime.schedule.errors) {
+          this.removeFromDb(anime.mediaId);
         } else if (airingSchedule.airingAt
             - Math.floor(new Date().getTime() / 1000) < 24 * 60 * 60) {
           const title = airingSchedule.media.title.english;
