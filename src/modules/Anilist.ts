@@ -64,7 +64,8 @@ class AniListAPI {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public async fetchMediaAiring(mediaId: number): Promise<{ schedule: AiringSchedule, mediaId: number }> {
+  public async fetchMediaAiring(mediaId: number):
+  Promise<{ schedule: AiringSchedule, mediaId: number }> {
     const response = await fetch('https://graphql.anilist.co', {
       method: 'POST',
       headers: {
@@ -110,17 +111,18 @@ class AniListAPI {
 
     // eslint-disable-next-line
     new CronJob('00 00 00 * * *', async () => {
-      (await this.getDailySchedule()).forEach((anime: { schedule: AiringSchedule, mediaId: number }) => {
-        const airingSchedule = anime.schedule.data.AiringSchedule;
-        if (anime.schedule.errors) {
-          this.removeFromDb(anime.mediaId);
-        } else if (airingSchedule.airingAt
+      (await this.getDailySchedule())
+        .forEach((anime: { schedule: AiringSchedule, mediaId: number }) => {
+          const airingSchedule = anime.schedule.data.AiringSchedule;
+          if (anime.schedule.errors) {
+            this.removeFromDb(anime.mediaId);
+          } else if (airingSchedule.airingAt
             - Math.floor(new Date().getTime() / 1000) < 24 * 60 * 60) {
-          const title = airingSchedule.media.title.english;
-          const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
-          field.value += `♡ \\♦️️ Episode ${airingSchedule.episode} - [${title}](${url})\n`;
-        }
-      });
+            const title = airingSchedule.media.title.english;
+            const url = `https://anilist.co/anime/${airingSchedule.mediaId}`;
+            field.value += `♡ \\♦️️ Episode ${airingSchedule.episode} - [${title}](${url})\n`;
+          }
+        });
 
       if (field.value === '') {
         field.value = 'Nothing yet!';
@@ -129,7 +131,10 @@ class AniListAPI {
       embed.setFields([field]);
       (this.bot.channels.cache.get(this.channelId) as TextBasedChannel).send({
         content: `<@&${this.roleId}>`, embeds: [embed],
-      }).then(() => { field.value = ''; });
+      }).then(() => {
+        field.value = '';
+        embed.setTitle(`🌸 The Daily Anime News [${day().add(1, 'day').format('MM/DD/YYYY')}] 🌸`);
+      });
     }, null, true, 'EST');
   }
 }
